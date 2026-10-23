@@ -189,3 +189,108 @@ if __name__ == "__main__":
     df.to_csv(out_path, index=False)
     print(f"Wrote synthetic dataset: {out_path}  shape={df.shape}")
     print(df[LABEL_COLUMN].value_counts())
+
+
+# ---------------------------------------------------------------------------
+# Phase 2 addition: day-structured synthetic week
+# ---------------------------------------------------------------------------
+# Real CICIDS2017 is NOT interleaved like generate_synthetic_cicids(): the
+# attacks were executed on a fixed weekly schedule, so each attack family
+# lives in a time window on one weekday.  This generator mimics that
+# structure (and the CSV timestamp quirks) so Phase 2's real-data code paths
+# -- d/m/Y parsing, 12-hour fix, day-file ordering, novel classes appearing
+# only in the stream -- can be tested without the real download.
+WEEK_SCHEDULE = {
+    0: ["BENIGN"],                                                             # Monday
+    1: ["BENIGN", "FTP-Patator", "SSH-Patator"],                               # Tuesday
+    2: ["BENIGN", "DoS slowloris", "DoS Slowhttptest", "DoS Hulk",
+        "DoS GoldenEye", "Heartbleed"],                                        # Wednesday
+    3: ["BENIGN", "Web Attack - Brute Force", "Infiltration"],                 # Thursday
+    4: ["BENIGN", "Bot", "PortScan", "DDoS"],                                  # Friday
+}
+_WEEK_PROFILE = dict(ATTACK_PROFILE)
+_WEEK_PROFILE["Web Attack - Brute Force"] = _WEEK_PROFILE.pop("Web Attack Brute Force")
+_DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+
+
+def _cicids_ts_string(ts: pd.Timestamp) -> str:
+    """d/m/Y H:MM on a 12-hour clock with no AM/PM (the real CSV quirk)."""
+    h = ts.hour - 12 if ts.hour > 12 else ts.hour
+    return f"{ts.day}/{ts.month}/{ts.year} {h}:{ts.minute:02d}"
+
+
+def generate_synthetic_week(
+    n_rows: int = 60_000,
+    seed: int = RANDOM_SEED,
+    timestamp_style: str = "cicids",   # 'cicids' | 'iso' | 'none'
+    min_per_class: int = 5,
+    keep_day: bool = False,
+) -> pd.DataFrame:
+    """Synthetic Mon-Fri capture with weekday-scheduled attacks.
+
+    Returned frame is in *shuffled* row order when timestamps are present (so
+    nothing can be ordered by accident) and in capture order when
+    ``timestamp_style='none'`` (mimicking the MachineLearningCVE files).
+    """
+    rng = np.random.default_rng(seed)
+    labels = list(_WEEK_PROFILE)
+    probs = np.array([_WEEK_PROFILE[k] for k in labels]); probs /= probs.sum()
+    counts = {l: max(min_per_class, int(c)) for l, c in zip(labels, rng.multinomial(n_rows, probs))}
+
+    # split each class across the days it occurs on (benign: roughly even)
+    frames = []
+    day0 = pd.Timestamp("2017-07-03")
+    for day, classes in WEEK_SCHEDULE.items():
+        day_start = day0 + pd.Timedelta(days=day, hours=8)
+        for label in classes:
+            n_days = sum(label in v for v in WEEK_SCHEDULE.values())
+            n = counts[label] // n_days
+            if n == 0:
+                continue
+            feats = _simulate_class_features(
+                rng, "Web Attack Brute Force" if label.startswith("Web Attack") else label, n)
+            feats[LABEL_COLUMN] = label
+            if label == "BENIGN":
+                lo, hi = 0.0, 9.0
+            else:  # attack lives in a contiguous window of the working day
+                width = rng.uniform(0.5, 2.5)
+                lo = rng.uniform(1.0, 8.0 - width)
+                hi = lo + width
+            feats["_ts"] = day_start + pd.to_timedelta(rng.uniform(lo, hi, n) * 3600, unit="s")
+            feats["_day"] = day
+            frames.append(feats)
+
+    df = pd.concat(frames, ignore_index=True).sort_values("_ts", kind="mergesort").reset_index(drop=True)
+
+    # CICIDS2017-style artefacts
+    bad = rng.choice(len(df), size=max(1, len(df) // 2000), replace=False)
+    df.loc[bad, "Flow Bytes/s"] = np.inf
+    nan = rng.choice(len(df), size=max(1, len(df) // 2000), replace=False)
+    df.loc[nan, "Flow Packets/s"] = np.nan
+
+    drop = ["_ts"] + ([] if keep_day else ["_day"])
+    if timestamp_style == "none":
+        return df.drop(columns=drop)  # keep capture order
+    df[TIMESTAMP_COLUMN] = df["_ts"] if timestamp_style == "iso" else df["_ts"].map(_cicids_ts_string)
+    df = df.drop(columns=drop)
+    return df.sample(frac=1.0, random_state=seed).reset_index(drop=True)  # shuffle
+
+
+def write_synthetic_week_csvs(out_dir, n_rows: int = 20_000, seed: int = RANDOM_SEED, with_timestamp: bool = True):
+    """Write one CSV per weekday named like the real release, e.g.
+    'Monday-WorkingHours.pcap_ISCX.csv'.  Without timestamps the rows are in
+    capture order, like the MachineLearningCVE release."""
+    from pathlib import Path
+
+    out_dir = Path(out_dir); out_dir.mkdir(parents=True, exist_ok=True)
+    df = generate_synthetic_week(n_rows, seed, timestamp_style="cicids" if with_timestamp else "none",
+                                 keep_day=True)
+    paths = []
+    for day, name in enumerate(_DAY_NAMES):
+        part = df[df["_day"] == day].drop(columns=["_day"])
+        # leading spaces in headers, like the real files
+        part = part.rename(columns=lambda c: f" {c}" if c != "Flow Duration" else c)
+        p = out_dir / f"{name}-WorkingHours.pcap_ISCX.csv"
+        part.to_csv(p, index=False)
+        paths.append(p)
+    return paths

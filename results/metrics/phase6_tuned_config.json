@@ -1,0 +1,47 @@
+{
+ "data_tag": "SYNTHETIC",
+ "label_delay_batches": 2,
+ "tolerance": 10,
+ "members": {
+  "adwin_err": {
+   "adwin_delta": 0.05
+  },
+  "ph_err": {
+   "ph_delta": 0.005,
+   "ph_threshold": 0.1
+  },
+  "psi": {
+   "psi_threshold": 0.05
+  },
+  "mmd": {
+   "mmd_mult": 1.5
+  },
+  "adwin_conf": {
+   "adwin_conf_delta": 0.01
+  }
+ },
+ "fusion": {
+  "weights": {
+   "adwin_err": 0.0,
+   "ph_err": 0.25,
+   "psi": 0.25,
+   "mmd": 0.0
+  },
+  "theta": 0.5
+ },
+ "criterion": "J = det_rate - 0.02*FA/1000 - 0.002*mean_delay",
+ "validation_seeds": [
+  1001,
+  1002,
+  1003
+ ],
+ "test_seeds": [
+  2001,
+  2002,
+  2003,
+  2004,
+  2005,
+  2006
+ ],
+ "written_before_test_scenarios_built": true
+}

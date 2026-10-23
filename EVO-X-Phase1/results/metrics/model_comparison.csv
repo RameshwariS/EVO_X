@@ -1,2 +1,0 @@
-model,accuracy,precision_macro,recall_macro,f1_macro,precision_weighted,recall_weighted,f1_weighted
-random_forest_baseline,0.991,0.7534486005375036,0.6874199943786639,0.7024327658339681,0.9888344023388449,0.991,0.989089793392913

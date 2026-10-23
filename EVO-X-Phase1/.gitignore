@@ -1,7 +1,0 @@
-__pycache__/
-*.pyc
-.pytest_cache/
-data/raw/*.csv
-results/models/*.joblib
-.venv/
-*.egg-info/

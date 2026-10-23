@@ -5,3 +5,7 @@ xgboost>=2.0
 matplotlib>=3.7
 seaborn>=0.12
 joblib>=1.3
+river>=0.21
+scipy>=1.11
+pytest>=7.4
+confluent-kafka>=2.3   # only needed for --transport kafka; the in-memory fallback needs nothing

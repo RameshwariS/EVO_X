@@ -1,3 +1,7 @@
+> **Phase A (streaming, drift lab, detectors) added — see [PHASE_A.md](PHASE_A.md).**
+
+> **Phase 2 (stream construction) has been added — see [PHASE2.md](PHASE2.md).**
+
 # EVO-X — Phase 1: Static Baseline IDS on CICIDS2017
 
 **Project:** EVO-X: An Autonomous AI Model Evolution Framework for Continual

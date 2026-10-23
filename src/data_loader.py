@@ -15,6 +15,8 @@ import logging
 from pathlib import Path
 from typing import List
 
+import re
+
 import pandas as pd
 
 from src.config import RAW_DATA_DIR, LABEL_COLUMN, TIMESTAMP_COLUMN
@@ -24,11 +26,37 @@ logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 
+_WEEKDAYS = {"monday": 0, "tuesday": 1, "wednesday": 2, "thursday": 3, "friday": 4}
+
+
+def _chronological_file_key(path: Path):
+    """Sort key putting CICIDS2017 day-files in capture order.
+
+    A plain alphabetical sort (what Phase 1 used) yields Friday, Monday,
+    Thursday, Tuesday, Wednesday -- i.e. NOT chronological, which silently
+    corrupts any time-ordered split when the CSVs carry no Timestamp column
+    (as in the 'MachineLearningCVE' release).  Order: weekday, then
+    Morning < Afternoon, then name.
+    """
+    name = path.name.lower()
+    day = next((rank for d, rank in _WEEKDAYS.items() if name.startswith(d)), 99)
+    half = 1 if "afternoon" in name else 0
+    # Friday afternoon: the PortScan capture (~13:55) precedes DDoS (~15:56),
+    # but alphabetically "DDos" < "PortScan".
+    late = 1 if "ddos" in name else 0
+    return (day, half, late, name)
+
+
 def _find_real_csvs(raw_dir: Path) -> List[Path]:
-    return sorted(p for p in raw_dir.glob("*.csv") if not p.name.startswith("synthetic_"))
+    files = [p for p in raw_dir.glob("*.csv") if not p.name.startswith("synthetic_")]
+    return sorted(files, key=_chronological_file_key)
 
 
-def load_raw_data(raw_dir: Path = RAW_DATA_DIR, force_synthetic: bool = False) -> pd.DataFrame:
+def load_raw_data(
+    raw_dir: Path = RAW_DATA_DIR,
+    force_synthetic: bool = False,
+    add_provenance: bool = False,
+) -> pd.DataFrame:
     """Load and concatenate raw CICIDS2017 CSV(s).
 
     Returns a single DataFrame with (at minimum) a Label column and, where
@@ -36,6 +64,12 @@ def load_raw_data(raw_dir: Path = RAW_DATA_DIR, force_synthetic: bool = False) -
     trailing whitespace, which is a well-known quirk of the public
     CICIDS2017 CSV release (columns are shipped with leading spaces, e.g.
     " Label", " Destination Port").
+
+    If ``add_provenance`` is True (used by Phase 2), two helper columns are
+    added: ``_day_rank`` (index of the day-file in capture order) and
+    ``_row_in_file`` (row position inside its file).  They let the stream
+    builder recover time order when the CSVs have no Timestamp column.
+    They are underscore-prefixed and are never used as model features.
     """
     real_csvs = [] if force_synthetic else _find_real_csvs(raw_dir)
 
@@ -46,6 +80,9 @@ def load_raw_data(raw_dir: Path = RAW_DATA_DIR, force_synthetic: bool = False) -
             logger.info("  reading %s", path.name)
             df = pd.read_csv(path, low_memory=False, encoding="latin1")
             df.columns = [c.strip() for c in df.columns]
+            if add_provenance:
+                df["_day_rank"] = len(frames)
+                df["_row_in_file"] = range(len(df))
             frames.append(df)
         data = pd.concat(frames, ignore_index=True)
     else:

@@ -26,11 +26,13 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 RAW_DATA_DIR = DATA_DIR / "raw"
 RESULTS_DIR = PROJECT_ROOT / "results"
+PROCESSED_DIR = DATA_DIR / "processed"
+STREAM_DIR = PROCESSED_DIR / "cicids2017_stream"
 MODELS_DIR = RESULTS_DIR / "models"
 FIGURES_DIR = RESULTS_DIR / "figures"
 METRICS_DIR = RESULTS_DIR / "metrics"
 
-for d in [RAW_DATA_DIR, RESULTS_DIR, MODELS_DIR, FIGURES_DIR, METRICS_DIR]:
+for d in [RAW_DATA_DIR, PROCESSED_DIR, RESULTS_DIR, MODELS_DIR, FIGURES_DIR, METRICS_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
@@ -89,3 +91,42 @@ XGBOOST_PARAMS = dict(
     eval_metric="mlogloss",
     random_state=RANDOM_SEED,
 )
+
+# ---------------------------------------------------------------------------
+# Phase 2 — time-ordered stream construction (Synopsis §7.6, §7.9 Phase 2)
+# ---------------------------------------------------------------------------
+# The stream is: [ reference window | live stream ].  The reference window is
+# the "historical dataset" the first IDS is trained on; everything after it
+# is replayed batch-by-batch (later, through Kafka — Phase 4).
+#
+# DESIGN DECISION TO CONFIRM WITH GUIDE: on real CICIDS2017, attacks are
+# scheduled by weekday, so a chronological cut places most attack families
+# AFTER the reference window.  See results/metrics/phase2_class_timeline.csv
+# after running on real data, then pick the value.
+REFERENCE_FRACTION = 0.30        # share of the time-ordered data used as reference
+REFERENCE_VAL_FRACTION = 0.20    # last 20% of the reference window = validation
+STREAM_BATCH_SIZE = 1000         # flows per replay batch
+
+# ---------------------------------------------------------------------------
+# Phase A (synopsis phases 4-6) -- streaming, drift lab, detectors
+# ---------------------------------------------------------------------------
+# Kafka topics (Module 4).  Only the first two carry data in Phase A; the other
+# three are created as stubs and filled in Phases B/C.
+KAFKA_BOOTSTRAP = "localhost:9092"
+TOPIC_EVENTS = "network-events"        # 1 partition: ordering is the point
+TOPIC_PREDICTIONS = "predictions"
+TOPIC_DRIFT = "drift-events"           # stub (written from Phase A3 onwards)
+TOPIC_EVOLUTION = "evolution-events"   # stub (Phase B2)
+TOPIC_MODEL = "model-events"           # stub (Phase C3)
+
+# LABEL POLICY (decide once, apply to every method including baselines).
+# Default proposal from the plan, Appendix 2: labels for batch t become
+# available when batch t+LABEL_DELAY_BATCHES has been scored.  Label-free
+# detectors (PSI, MMD, confidence-ADWIN) ignore this entirely.
+LABEL_DELAY_BATCHES = 2
+
+# Two seed families that must never be mixed (plan, "Rules that apply to every phase").
+VALIDATION_SEEDS = (1001, 1002, 1003)            # choose thresholds / weights here
+TEST_SEEDS = (2001, 2002, 2003, 2004, 2005, 2006)  # report here (>=6 so Wilcoxon can reach p<0.05)
+
+SCENARIO_DIR = PROCESSED_DIR / "scenarios"
