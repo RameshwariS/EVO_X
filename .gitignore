@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.coverage
+htmlcov/
+.env
+# Raw/processed datasets and newly generated experiment outputs stay local.
+data/raw/*
+!data/raw/README.md
+data/processed/
+results/runs/
+results/phase_b_*/
+*.joblib
