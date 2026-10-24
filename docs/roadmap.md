@@ -2,7 +2,7 @@
 
 **Project:** EVO-X: An Autonomous AI Model Evolution Framework for Continual Intrusion Detection under Concept Drift
 **Basis:** Project Synopsis §4 (objectives, RQs, hypotheses), §6.1 (MVP vs extensions), §7 (methodology), §8 (experiments), §7.9 (timeline)
-**Status:** Synopsis Phases 1–3 are built (code + tests). The four phases below group synopsis Phases **4–14**.
+**Status:** Phases A/B and the Phase C evaluation, gate, registry, rollback and comparative-runner code are implemented and tested. Phase C synthetic checks are complete; full real-data multi-seed benchmarks remain outstanding. The four groups below map to synopsis Phases **4–14**. See [the Phase C guide](guides/phase-c.md).
 
 > Naming: to avoid confusion with the synopsis numbering, the four groups are called **Phase A, B, C, D** here.
 

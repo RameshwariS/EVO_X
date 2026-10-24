@@ -296,6 +296,8 @@ def main(argv=None):
     pd.DataFrame(sensitivity).assign(data_tag=tag).to_csv(out / "weight_sensitivity.csv", index=False)
     frozen = dict(data_tag=tag, weights=weights.normalized(), thresholds=asdict(thresholds), cost_scale=cost_scale,
                   latency_scale=latency_scale, profiles=frozen_profiles, validation_seeds=val_seeds,
+                  algorithm=a.model, label_policy=asdict(policy),
+                  full_strategy_config=asdict(full_config), proxy_strategy_config=asdict(proxy_config),
                   written_before_test_scenarios_built=True)
     write_json(out / "frozen_controller.json", frozen)
     log.info("Weights and cost profiles frozen. Preparing held-out test scenarios.")

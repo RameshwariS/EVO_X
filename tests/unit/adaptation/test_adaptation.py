@@ -73,6 +73,8 @@ def test_every_strategy_produces_lineage_without_changing_parent(base, action):
     if action != Action.NO_OP:
         assert c.profile["training_seconds"] > 0 and c.profile["model_bytes"] > 0
         assert c.profile["latency_ms_per_1k"] > 0 and len(c.training_snapshot_id) == 64
+        assert c.profile["sampled_peak_rss_bytes"] >= c.profile["rss_before_bytes"] > 0
+        assert c.profile["cpu_seconds"] >= 0
 
 
 def test_incremental_preserves_trees_full_retrain_does_not_and_new_classes_align(base):

@@ -11,6 +11,7 @@ import numpy as np
 import pytest
 
 from evox.cli import COMMANDS, main
+from evox import __version__
 from evox.models.compat import legacy_model_modules
 from evox.models.ids import IDSModel, IncrementalForest
 
@@ -37,7 +38,7 @@ def test_installed_cli_works_outside_repository_and_imports_do_not_create_paths(
     assert not workspace.exists()
     result = subprocess.run([sys.executable, "-m", "evox", "--version"], cwd=tmp_path,
                             env=env, capture_output=True, text=True, check=True)
-    assert result.stdout.strip() == "0.2.0" and not workspace.exists()
+    assert result.stdout.strip() == __version__ and not workspace.exists()
 
 
 def test_old_pickle_class_paths_load_with_identical_predictions(tmp_path):

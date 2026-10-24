@@ -2,11 +2,12 @@
 
 An experimental framework for continual intrusion detection under concept drift.
 EVO-X combines streaming IDS models, drift detection and analysis, adaptation
-strategies, and a controller that generates model candidates in shadow mode.
+strategies, and a controller that governs candidate promotion in replay experiments.
 
-Phases A and B are implemented. Safety gating, promotion, rollback and the final
-comparative experiments remain Phase C work. Synthetic runs validate the pipeline;
-they are not evidence of real-world detection performance.
+Phases A and B and the Phase C lifecycle/comparison implementation are available.
+Phase C adds candidate evaluation, safety gating, versioned promotion, rollback
+and continual comparative replay. Full real-data experiments remain outstanding.
+Synthetic runs validate the pipeline; they are not evidence of real-world detection performance.
 
 ## Repository layout
 
@@ -18,6 +19,7 @@ src/evox/
   drift/         # drift detectors, signatures and scenario generation
   adaptation/    # label policy, memory and candidate strategies
   evolution/     # eligibility rules, utility ranking and proxy evaluation
+  lifecycle/     # durable registry, promotion, history and rollback
   evaluation/    # detection, streaming and drift metrics
   experiments/   # executable research workflows
   tools/         # preflight checks, reference sweep and report generation
@@ -61,6 +63,7 @@ invoke the same CLI explicitly:
 .venv/Scripts/python.exe -m evox build-stream --synthetic
 .venv/Scripts/python.exe -m evox replay run --synthetic --transport memory --check-equivalence
 .venv/Scripts/python.exe -m evox evolve --synthetic --quick
+.venv/Scripts/python.exe -m evox lifecycle-demo --output-dir results/runs/phase_c_demo_next
 ```
 
 Run `evox COMMAND --help` for each workflow's options. The Phase B quick run
@@ -95,6 +98,7 @@ that method resolves the old module names while preserving the saved files.
 
 - [Phase A: streaming and drift laboratory](docs/guides/phase-a.md)
 - [Phase B: adaptation and Evolution Controller](docs/guides/phase-b.md)
+- [Phase C: safety, lifecycle and comparative experiments](docs/guides/phase-c.md)
 - [Repository architecture](docs/architecture.md)
 - [Layout and command migration](docs/migration.md)
 - [Remaining project roadmap](docs/roadmap.md)
@@ -103,10 +107,12 @@ that method resolves the old module names while preserving the saved files.
 - [Historical phase plans](docs/archive/phases/)
 
 The repository's CI configuration runs unit tests on Windows/Linux and builds
-Python distributions. Deployment readiness still depends on the remaining
-safety, lifecycle and evaluation work.
+Python distributions. Full real-data validation and live deployment are outside
+the synthetic verification completed here.
 
-Layout verification: **158 tests passed, 1 broker-dependent test skipped**. The
+Verification: **207 tests passed, 1 broker-dependent test skipped**. The
 wheel and source distribution build successfully, the installed wheel runs
 outside the checkout, old saved models still load, and the packaged Phase B
-smoke run completes all 14 scenarios. Existing dataset/result files were preserved.
+smoke run completes all 14 scenarios. Phase C checks cover 70 comparative replays
+per classifier plus promote/reject/rollback with exact parent restoration.
+Existing dataset/result files were preserved.

@@ -1,5 +1,8 @@
 # Phase B — Adaptation and decision core
 
+> Phase C evaluation, gating, registry and rollback are now implemented; see the
+> [Phase C guide](phase-c.md). This guide describes Phase B's shadow-only workflow.
+
 Implements synopsis Phases 7–8 (Modules 7–9). Phase A remains the detector/scenario
 foundation. Phase B runs in **shadow mode**: it creates candidates and decision
 records; the deployed parent is never swapped. Promotion, rejection, rollback,

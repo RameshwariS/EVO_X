@@ -16,6 +16,8 @@ COMMANDS = {
     "scenarios": ("evox.experiments.scenarios", "Construct controlled drift scenarios"),
     "detect": ("evox.experiments.detect", "Tune and evaluate drift detectors"),
     "evolve": ("evox.experiments.evolve", "Run the Phase B controller and shadow candidates"),
+    "compare": ("evox.experiments.compare", "Run Phase C gated continual replay and baseline comparisons"),
+    "lifecycle-demo": ("evox.experiments.lifecycle_demo", "Demonstrate promotion, rejection and rollback"),
     "check-data": ("evox.tools.check_data", "Inspect raw dataset schema and timestamps"),
     "reference-sweep": ("evox.tools.reference_sweep", "Compare reference-window fractions"),
     "report": ("evox.tools.report", "Generate the Phase 3 report from saved metrics"),

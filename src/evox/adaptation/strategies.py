@@ -13,6 +13,7 @@ import numpy as np
 
 from evox.adaptation.data import AdaptationData, LabelPolicy, Samples, balanced_subset, combine
 from evox.models.ids import IDSModel
+from evox.evaluation.resources import ProcessMemorySampler
 
 
 class Action(str, Enum):
@@ -70,7 +71,9 @@ class AdaptationStrategy:
             return CandidateModel(data.parent_version, data.parent_version, self.action.value, base_model,
                                   recent.take(np.array([], int)).snapshot(), [],
                                   dict(training_seconds=0.0, peak_python_bytes=0, model_bytes=0,
-                                       latency_ms_per_1k=0.0, n_train=0),
+                                       latency_ms_per_1k=0.0, cpu_seconds=0.0, n_train=0,
+                                       rss_before_bytes=0, sampled_peak_rss_bytes=0, rss_increase_bytes=0,
+                                       rss_sample_interval_seconds=.01),
                                   metadata={"reason": "parent unchanged"}, status="NO_OP")
         recent = balanced_subset(recent, self.config.recent_capacity, base_model.seed)
         memory = balanced_subset(memory, self.config.memory_capacity, base_model.seed)
@@ -88,7 +91,10 @@ class AdaptationStrategy:
         if not tracking:
             tracemalloc.start()
         before, _ = tracemalloc.get_traced_memory()
+        memory = ProcessMemorySampler()
+        memory.start()
         t0 = time.perf_counter()
+        cpu0 = time.process_time()
         try:
             if self.action == Action.INCREMENTAL:
                 model = copy.deepcopy(base_model)
@@ -96,8 +102,10 @@ class AdaptationStrategy:
             else:
                 model = base_model.clone().fit(train.X, train.y)
             seconds = time.perf_counter() - t0
+            cpu_seconds = time.process_time() - cpu0
             _, peak = tracemalloc.get_traced_memory()
         finally:
+            memory.stop()
             if not tracking:
                 tracemalloc.stop()
         probe = train.X[:min(256, len(train))]
@@ -107,12 +115,14 @@ class AdaptationStrategy:
             start = time.perf_counter(); model.predict(probe)
             timings.append((time.perf_counter() - start) * 1e6 / len(probe))
         profile = dict(training_seconds=seconds, peak_python_bytes=max(0, peak - before),
+                       cpu_seconds=cpu_seconds,
                        model_bytes=len(pickle.dumps(model)), latency_ms_per_1k=float(np.median(timings)),
-                       n_train=len(train))
+                       n_train=len(train), **memory.record())
         return CandidateModel(cid, data.parent_version, self.action.value, model, snapshot, train.ids.tolist(), profile,
                               metadata=dict(now_batch=data.now_batch, label_policy=asdict(label_policy),
                                             strategy_config=asdict(self.config), algorithm=base_model.kind,
-                                            memory_measure="tracemalloc Python peak; excludes native allocations"))
+                                            model_params=dict(model.params), model_seed=model.seed,
+                                            memory_measure="Python allocation peak plus 10ms sampled process RSS; RSS includes native/resident state"))
 
 
 class NoOpStrategy(AdaptationStrategy):

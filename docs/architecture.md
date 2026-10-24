@@ -19,7 +19,8 @@ EVO_X/
 │   ├── streaming/              # codec, transports, producer, consumer, replay pipeline
 │   ├── drift/                  # detectors, analyzer, scenario generator
 │   ├── adaptation/             # label policy, bounded memory, candidate strategies
-│   ├── evolution/              # controller and cheap proxy evaluation
+│   ├── evolution/              # controller, proxy evaluation and Safety Gate
+│   ├── lifecycle/              # versioned artifacts, event journal and rollback
 │   ├── evaluation/             # baseline, stream and detector metrics/reporting
 │   ├── experiments/            # executable workflows for Phases 1–B
 │   └── tools/                  # data preflight, reference sweep, report generation
@@ -51,7 +52,8 @@ not create directories or read the raw dataset; writing commands create their
 own output paths when they execute.
 
 The CLI is the supported workflow interface. For example, `evox evolve` runs
-the Phase B experiment while `evox replay run` uses the transport pipeline.
+Phase B shadow experiments, `evox compare` runs Phase C continual comparisons,
+and `evox replay run` uses the transport pipeline.
 `python -m evox` invokes exactly the same entry point. No `sys.path` modification
 or repository-root Python wrapper scripts are needed.
 
@@ -81,6 +83,6 @@ artifacts; directly calling `joblib.load()` bypasses the compatibility mapping.
 
 Add reusable features to their domain package and keep file-writing experiment
 logic in `experiments`. Add tests to the matching `tests/unit` group; mark tests
-that require external services as integration tests. Phase C can add evaluator,
-safety and registry modules when implemented; empty placeholder services are
-deliberately not included in this structure.
+that require external services as integration tests. Phase C evaluation, safety
+and registry code lives in the evaluation, evolution and lifecycle packages.
+Future dashboard/service code can be added when implemented.
