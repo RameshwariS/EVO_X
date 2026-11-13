@@ -45,6 +45,7 @@ flowchart TD
 | **A — Streaming and drift lab** | Replay streams, create controlled drift scenarios, compare detectors, and summarize detected events. | `streaming/`, `drift/`, `evaluation/drift.py` |
 | **B — Adaptation and controller** | Build candidate models and record controller decisions in shadow mode. | `adaptation/`, `evolution/controller.py`, `experiments/evolve.py` |
 | **C — Safety and lifecycle** | Independently evaluate candidates, gate promotion, maintain versions, monitor deployed updates, roll back, and compare policies. | `evolution/safety.py`, `lifecycle/`, `experiments/compare.py` |
+| **D — Generalisation, demo and write-up** | Test algorithm transfer and dataset portability, show runs in a read-only dashboard, run a scripted demo, and reproduce the pipeline with a manifest. | `experiments/generalize.py`, `evaluation/generalization.py`, `dashboard/`, `experiments/demo.py`, `experiments/reproduce.py` |
 
 ## Repository layout
 
@@ -57,6 +58,7 @@ src/evox/
   adaptation/      # label policy, bounded memory, candidate strategies
   evolution/       # controller, proxy evaluation, Safety Gate
   lifecycle/       # versioned model registry, event journal, promotion, rollback
+  dashboard/       # read-only run dashboard (local server and offline HTML export)
   evaluation/      # detection, streaming, candidate, and comparison metrics
   experiments/     # CLI workflows and experiment orchestration
   tools/           # data checks, reference sweeps, report generation
@@ -96,6 +98,8 @@ Use the installed `evox` command after activating the virtual environment, or in
 .venv/Scripts/python.exe -m evox replay run --synthetic --transport memory --check-equivalence
 .venv/Scripts/python.exe -m evox evolve --synthetic --quick --output-dir results/runs/phase_b_synthetic_next
 .venv/Scripts/python.exe -m evox lifecycle-demo --output-dir results/runs/phase_c_demo_next
+.venv/Scripts/python.exe -m evox demo --output-dir results/runs/phase_d_demo_next
+.venv/Scripts/python.exe -m evox reproduce --output-dir results/runs/phase_d_reproduce_next
 ```
 
 `build-stream` uses CICIDS2017 CSVs in `data/raw/` when available and writes the processed stream under `data/processed/cicids2017_stream/` by default. Use `build-stream --synthetic` only for a synthetic pipeline check; it writes to the same default stream directory unless `--out-dir` is changed. Always use a fresh output directory for new experiment runs.
@@ -132,6 +136,8 @@ Quick runs are pipeline checks, not full research evaluations. Controlled drift 
 - [Phase A: streaming and drift laboratory](docs/guides/phase-a.md)
 - [Phase B: adaptation and Evolution Controller](docs/guides/phase-b.md)
 - [Phase C: safety, lifecycle, and comparative experiments](docs/guides/phase-c.md)
+- [Phase D: generalisation, dashboard, demo, and reproducibility](docs/guides/phase-d.md)
+- [Limitations](docs/limitations.md), [viva preparation](docs/viva-prep.md), [reproducibility checklist](docs/reproducibility.md)
 - [Detailed repository architecture](docs/architecture.md)
 - [Layout and command migration](docs/migration.md)
 - [Remaining project roadmap](docs/roadmap.md)
