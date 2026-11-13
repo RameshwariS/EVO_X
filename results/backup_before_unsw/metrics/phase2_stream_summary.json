@@ -1,0 +1,69 @@
+{
+  "meta": {
+    "dataset": "SYNTHETIC-CICIDS2017-week",
+    "ordering_source": "timestamp",
+    "reference_fraction": 0.3,
+    "reference_val_fraction": 0.2,
+    "batch_size": 1000,
+    "n_total": 60005,
+    "n_ref_train": 14400,
+    "n_ref_val": 3601,
+    "n_stream": 42004,
+    "dropped_constant_features": [],
+    "deduplicated": true
+  },
+  "n_features": 21,
+  "classes": [
+    "BENIGN",
+    "Bot",
+    "DDoS",
+    "DoS GoldenEye",
+    "DoS Hulk",
+    "DoS Slowhttptest",
+    "DoS slowloris",
+    "FTP-Patator",
+    "Heartbleed",
+    "Infiltration",
+    "PortScan",
+    "SSH-Patator",
+    "Web Attack - Brute Force"
+  ],
+  "reference_class_ids": [
+    0,
+    7,
+    11
+  ],
+  "novel_class_stream_flows": 10713,
+  "novel_class_stream_share": 0.2550471383677745,
+  "n_batches": 43,
+  "validation": {
+    "shapes_consistent": {
+      "passed": true,
+      "detail": "21 features"
+    },
+    "all_values_finite": {
+      "passed": true,
+      "detail": "no NaN/inf in any split"
+    },
+    "labels_in_range": {
+      "passed": true,
+      "detail": "13 classes"
+    },
+    "benign_is_class_0": {
+      "passed": true,
+      "detail": ""
+    },
+    "time_monotonic": {
+      "passed": true,
+      "detail": "reference+stream timestamps non-decreasing"
+    },
+    "reference_precedes_stream": {
+      "passed": true,
+      "detail": "ref ends 2017-07-04 14:46:00, stream starts 2017-07-04 14:46:00"
+    },
+    "scaler_fit_on_ref_train_only": {
+      "passed": true,
+      "detail": "ref_train mean~0, std~1 on non-constant features"
+    }
+  }
+}

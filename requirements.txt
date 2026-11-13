@@ -1,0 +1,2 @@
+# Compatibility installation entrypoint; dependencies are defined in pyproject.toml.
+-e .[dev,kafka]

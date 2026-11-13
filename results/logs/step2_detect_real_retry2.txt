@@ -1,0 +1,70 @@
+start=2026-11-13T20:01:34+05:30
+command=.venv/bin/python -m evox detect --stream-dir data/processed/cicids2017_stream_real
+[INFO] [REAL] 56 validation / 110 test scenarios (label delay k=2 batches, tolerance 10)
+[INFO] [val] 25/56 scenarios prepared
+[INFO] [val] 50/56 scenarios prepared
+[INFO] tuned adwin_err  -> {'adwin_delta': 0.05}  (J=0.788 det=0.84 delay=6.8 FA/1000=2.0)
+[INFO] tuned ph_err     -> {'ph_delta': 0.002, 'ph_threshold': 0.05}  (J=0.689 det=0.81 delay=9.3 FA/1000=5.1)
+[INFO] tuned psi        -> {'psi_threshold': 0.05}  (J=0.904 det=0.90 delay=0.4 FA/1000=0.0)
+[INFO] tuned mmd        -> {'mmd_mult': 3.0}  (J=0.874 det=0.92 delay=4.8 FA/1000=1.8)
+[INFO] tuned adwin_conf -> {'adwin_conf_delta': 0.002}  (J=0.979 det=0.98 delay=1.0 FA/1000=0.1)
+[INFO] fusion tuned -> weights {'adwin_err': 1.0, 'ph_err': 0.25, 'psi': 1.0, 'mmd': 0.25} theta 0.50 (J=0.981 det=1.00 delay=3.8 FA/1000=0.6)
+[INFO] frozen config written; building TEST scenarios now
+[INFO] [test] 25/110 scenarios prepared
+[INFO] [test] 50/110 scenarios prepared
+[INFO] [test] 75/110 scenarios prepared
+[INFO] [test] 100/110 scenarios prepared
+[INFO] done in 354s
+
+== TEST: detector comparison (tuned on validation) ==
+  detector data_tag  needs_labels  n_events  n_detected  n_missed  detection_rate  mean_delay  median_delay  n_false  n_batches  fa_per_1000  n_repeat
+ adwin_err     REAL          True       126         107        19           0.849       8.383           4.0       19      13560        1.401        34
+    ph_err     REAL          True       126          92        34           0.730       9.315           4.0       71      13560        5.236        34
+       psi     REAL         False       126         116        10           0.921       0.448           0.0        3      13560        0.221         0
+       mmd     REAL         False       126         116        10           0.921       4.862           1.0       31      13560        2.286         1
+adwin_conf     REAL         False       126         117         9           0.929       1.034           0.0        5      13560        0.369       142
+     fused     REAL          True       126         126         0           1.000       3.571           1.0        2      13560        0.147         0
+
+== TEST: detection rate by drift kind ==
+value       abrupt  gradual  incremental  novel_class  recurring  stationary  temporary
+detector                                                                               
+adwin_conf     1.0     1.00         1.00         0.50       1.00         NaN       1.00
+adwin_err      1.0     1.00         0.94         1.00       0.75         NaN       0.50
+fused          1.0     1.00         1.00         1.00       1.00         NaN       1.00
+mmd            1.0     1.00         1.00         0.44       1.00         NaN       1.00
+ph_err         1.0     0.83         0.72         1.00       0.72         NaN       0.11
+psi            1.0     1.00         1.00         0.44       1.00         NaN       1.00
+
+== TEST: mean delay (batches) by drift kind ==
+value       abrupt  gradual  incremental  novel_class  recurring  stationary  temporary
+detector                                                                               
+adwin_conf     0.0      3.5          1.8          2.8        0.0         NaN        0.0
+adwin_err      3.1     15.0         22.6          2.2        3.5         NaN        6.0
+fused          0.6      7.9         12.8          2.2        0.5         NaN        0.5
+mmd            0.7     10.0         17.3          3.2        0.6         NaN        0.6
+ph_err         3.6     12.5         33.4          2.4        4.7         NaN        3.5
+psi            0.0      1.9          0.0          2.1        0.0         NaN        0.0
+
+== label-delay sensitivity (not re-tuned) ==
+ label_delay  detector  detection_rate  mean_delay  fa_per_1000
+           0 adwin_err            0.85        6.38         1.47
+           0    ph_err            0.74        7.34         5.01
+           2 adwin_err            0.85        8.38         1.40
+           2    ph_err            0.73        9.32         5.24
+           5 adwin_err            0.81       11.24         1.62
+           5    ph_err            0.68       12.36         5.38
+
+== analyzer: type_guess accuracy 0.59 over 126 detected events (look-ahead 8 batches) ==
+type_guess  abrupt  gradual  recurring  temporary
+type_truth                                       
+abrupt          47        7          0          0
+gradual         35        1          0          0
+recurring        0        0         18          0
+temporary       10        0          0          8
+Spearman(magnitude level, signature magnitude) per kind: {'abrupt': 0.94, 'gradual': 0.73, 'recurring': 0.94, 'temporary': 0.94, 'incremental': 0.77, 'novel_class': 0.94}
+onset_estimate error (batches): median 0.0, 90th pct |err| 2.0
+recurrence: second onset of recurring mean 1.00 (n=18) vs all other events mean 0.00
+novelty by kind: {'abrupt': 0.2, 'gradual': 0.07, 'incremental': 0.04, 'novel_class': 0.02, 'recurring': 0.23, 'temporary': 0.15}
+end=2026-11-13T20:07:30+05:30
+duration_seconds=356.6
+exit_code=0

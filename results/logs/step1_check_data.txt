@@ -1,0 +1,5 @@
+No CSVs in /media/shruti/3E2AA2792AA22E39/EVO_X/data/raw. See docs/archive/phases/PHASE2_PARTB.md.
+start=2026-11-13T18:21:35+05:30
+end=2026-11-13T18:21:36+05:30
+duration_seconds=1
+exit_code=1

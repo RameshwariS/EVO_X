@@ -1,0 +1,17 @@
+8 file(s), in the order they will be replayed:
+  Monday-WorkingHours.pcap_ISCX.csv                            cols= 79 Label=Y Timestamp=N
+  Tuesday-WorkingHours.pcap_ISCX.csv                           cols= 79 Label=Y Timestamp=N
+  Wednesday-workingHours.pcap_ISCX.csv                         cols= 79 Label=Y Timestamp=N
+  Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv       cols= 79 Label=Y Timestamp=N
+  Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv  cols= 79 Label=Y Timestamp=N
+  Friday-WorkingHours-Morning.pcap_ISCX.csv                    cols= 79 Label=Y Timestamp=N
+  Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv         cols= 79 Label=Y Timestamp=N
+  Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv             cols= 79 Label=Y Timestamp=N
+
+WARNING: no Timestamp column -> MachineLearningCVE release. Ordering falls back to capture-day file order. Prefer GeneratedLabelledFlows (TrafficLabelling).
+
+PREFLIGHT: OK
+start=2026-11-13T18:22:48+05:30
+end=2026-11-13T18:22:49+05:30
+duration_seconds=1
+exit_code=0

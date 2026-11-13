@@ -1,0 +1,10 @@
+python=Python 3.12.14
+cpu=12
+ram=15.26 GiB
+os=Ubuntu 22.04
+git_head=fatal: not a git repository (or any parent up to mount point /media/shruti)
+Stopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).
+start=2026-11-13T18:21:30+05:30
+end=2026-11-13T18:21:30+05:30
+duration_seconds=0
+exit_code=128

@@ -1,0 +1,5 @@
+type_truth,abrupt,gradual,recurring,temporary
+abrupt,48,5,0,1
+gradual,18,18,0,0
+recurring,0,0,18,0
+temporary,18,0,0,0

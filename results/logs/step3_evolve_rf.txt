@@ -1,0 +1,191 @@
+start=2026-11-13T20:07:55+05:30
+command=.venv/bin/python -m evox evolve --stream-dir data/processed/cicids2017_stream_real --detector-config results/real_experiment_artifacts_retry2/metrics/phase6_tuned_config.json --model random_forest --output-dir results/runs/rf_phase_b
+[INFO] abrupt_low_val1001: 2 detected events
+[INFO] abrupt_med_val1001: 2 detected events
+[INFO] abrupt_high_val1001: 1 detected events
+[INFO] gradual_low_val1001: 1 detected events
+[INFO] gradual_med_val1001: 1 detected events
+[INFO] gradual_high_val1001: 1 detected events
+[INFO] recurring_low_val1001: 4 detected events
+[INFO] recurring_med_val1001: 2 detected events
+[INFO] recurring_high_val1001: 2 detected events
+[INFO] temporary_low_val1001: 1 detected events
+[INFO] temporary_med_val1001: 3 detected events
+[INFO] temporary_high_val1001: 2 detected events
+[INFO] incremental_low_val1001: 1 detected events
+[INFO] incremental_med_val1001: 2 detected events
+[INFO] incremental_high_val1001: 1 detected events
+[INFO] novel_class_low_val1001: 2 detected events
+[INFO] novel_class_med_val1001: 2 detected events
+[INFO] novel_class_high_val1001: 1 detected events
+[INFO] abrupt_low_val1002: 1 detected events
+[INFO] abrupt_med_val1002: 1 detected events
+[INFO] abrupt_high_val1002: 1 detected events
+[INFO] gradual_low_val1002: 2 detected events
+[INFO] gradual_med_val1002: 1 detected events
+[INFO] gradual_high_val1002: 1 detected events
+[INFO] recurring_low_val1002: 3 detected events
+[INFO] recurring_med_val1002: 2 detected events
+[INFO] recurring_high_val1002: 2 detected events
+[INFO] temporary_low_val1002: 2 detected events
+[INFO] temporary_med_val1002: 1 detected events
+[INFO] temporary_high_val1002: 1 detected events
+[INFO] incremental_low_val1002: 1 detected events
+[INFO] incremental_med_val1002: 1 detected events
+[INFO] incremental_high_val1002: 1 detected events
+[INFO] novel_class_low_val1002: 3 detected events
+[INFO] novel_class_med_val1002: 1 detected events
+[INFO] novel_class_high_val1002: 1 detected events
+[INFO] abrupt_low_val1003: 1 detected events
+[INFO] abrupt_med_val1003: 1 detected events
+[INFO] abrupt_high_val1003: 1 detected events
+[INFO] gradual_low_val1003: 2 detected events
+[INFO] gradual_med_val1003: 1 detected events
+[INFO] gradual_high_val1003: 1 detected events
+[INFO] recurring_low_val1003: 2 detected events
+[INFO] recurring_med_val1003: 2 detected events
+[INFO] recurring_high_val1003: 2 detected events
+[INFO] temporary_low_val1003: 1 detected events
+[INFO] temporary_med_val1003: 1 detected events
+[INFO] temporary_high_val1003: 1 detected events
+[INFO] incremental_low_val1003: 1 detected events
+[INFO] incremental_med_val1003: 1 detected events
+[INFO] incremental_high_val1003: 1 detected events
+[INFO] novel_class_low_val1003: 1 detected events
+[INFO] novel_class_med_val1003: 2 detected events
+[INFO] novel_class_high_val1003: 1 detected events
+[INFO] stationary_low_val1001: 0 detected events
+[INFO] stationary_low_val1002: 0 detected events
+[INFO] stationary_low_val1003: 0 detected events
+[INFO] Weights and cost profiles frozen. Preparing held-out test scenarios.
+[INFO] abrupt_low_tes2001: 1 detected events
+[INFO] abrupt_med_tes2001: 1 detected events
+[INFO] abrupt_high_tes2001: 1 detected events
+[INFO] gradual_low_tes2001: 2 detected events
+[INFO] gradual_med_tes2001: 1 detected events
+[INFO] gradual_high_tes2001: 1 detected events
+[INFO] recurring_low_tes2001: 2 detected events
+[INFO] recurring_med_tes2001: 2 detected events
+[INFO] recurring_high_tes2001: 2 detected events
+[INFO] temporary_low_tes2001: 1 detected events
+[INFO] temporary_med_tes2001: 1 detected events
+[INFO] temporary_high_tes2001: 1 detected events
+[INFO] incremental_low_tes2001: 1 detected events
+[INFO] incremental_med_tes2001: 1 detected events
+[INFO] incremental_high_tes2001: 2 detected events
+[INFO] novel_class_low_tes2001: 2 detected events
+[INFO] novel_class_med_tes2001: 1 detected events
+[INFO] novel_class_high_tes2001: 1 detected events
+[INFO] abrupt_low_tes2002: 1 detected events
+[INFO] abrupt_med_tes2002: 1 detected events
+[INFO] abrupt_high_tes2002: 2 detected events
+[INFO] gradual_low_tes2002: 1 detected events
+[INFO] gradual_med_tes2002: 1 detected events
+[INFO] gradual_high_tes2002: 1 detected events
+[INFO] recurring_low_tes2002: 2 detected events
+[INFO] recurring_med_tes2002: 2 detected events
+[INFO] recurring_high_tes2002: 2 detected events
+[INFO] temporary_low_tes2002: 1 detected events
+[INFO] temporary_med_tes2002: 1 detected events
+[INFO] temporary_high_tes2002: 1 detected events
+[INFO] incremental_low_tes2002: 1 detected events
+[INFO] incremental_med_tes2002: 1 detected events
+[INFO] incremental_high_tes2002: 1 detected events
+[INFO] novel_class_low_tes2002: 1 detected events
+[INFO] novel_class_med_tes2002: 1 detected events
+[INFO] novel_class_high_tes2002: 1 detected events
+[INFO] abrupt_low_tes2003: 1 detected events
+[INFO] abrupt_med_tes2003: 1 detected events
+[INFO] abrupt_high_tes2003: 1 detected events
+[INFO] gradual_low_tes2003: 1 detected events
+[INFO] gradual_med_tes2003: 1 detected events
+[INFO] gradual_high_tes2003: 1 detected events
+[INFO] recurring_low_tes2003: 2 detected events
+[INFO] recurring_med_tes2003: 2 detected events
+[INFO] recurring_high_tes2003: 2 detected events
+[INFO] temporary_low_tes2003: 1 detected events
+[INFO] temporary_med_tes2003: 1 detected events
+[INFO] temporary_high_tes2003: 1 detected events
+[INFO] incremental_low_tes2003: 1 detected events
+[INFO] incremental_med_tes2003: 1 detected events
+[INFO] incremental_high_tes2003: 1 detected events
+[INFO] novel_class_low_tes2003: 1 detected events
+[INFO] novel_class_med_tes2003: 1 detected events
+[INFO] novel_class_high_tes2003: 1 detected events
+[INFO] abrupt_low_tes2004: 1 detected events
+[INFO] abrupt_med_tes2004: 1 detected events
+[INFO] abrupt_high_tes2004: 1 detected events
+[INFO] gradual_low_tes2004: 1 detected events
+[INFO] gradual_med_tes2004: 1 detected events
+[INFO] gradual_high_tes2004: 1 detected events
+[INFO] recurring_low_tes2004: 3 detected events
+[INFO] recurring_med_tes2004: 2 detected events
+[INFO] recurring_high_tes2004: 2 detected events
+[INFO] temporary_low_tes2004: 1 detected events
+[INFO] temporary_med_tes2004: 1 detected events
+[INFO] temporary_high_tes2004: 1 detected events
+[INFO] incremental_low_tes2004: 1 detected events
+[INFO] incremental_med_tes2004: 1 detected events
+[INFO] incremental_high_tes2004: 1 detected events
+[INFO] novel_class_low_tes2004: 1 detected events
+[INFO] novel_class_med_tes2004: 1 detected events
+[INFO] novel_class_high_tes2004: 1 detected events
+[INFO] abrupt_low_tes2005: 1 detected events
+[INFO] abrupt_med_tes2005: 1 detected events
+[INFO] abrupt_high_tes2005: 1 detected events
+[INFO] gradual_low_tes2005: 1 detected events
+[INFO] gradual_med_tes2005: 1 detected events
+[INFO] gradual_high_tes2005: 1 detected events
+[INFO] recurring_low_tes2005: 3 detected events
+[INFO] recurring_med_tes2005: 3 detected events
+[INFO] recurring_high_tes2005: 2 detected events
+[INFO] temporary_low_tes2005: 2 detected events
+[INFO] temporary_med_tes2005: 2 detected events
+[INFO] temporary_high_tes2005: 2 detected events
+[INFO] incremental_low_tes2005: 1 detected events
+[INFO] incremental_med_tes2005: 1 detected events
+[INFO] incremental_high_tes2005: 1 detected events
+[INFO] novel_class_low_tes2005: 1 detected events
+[INFO] novel_class_med_tes2005: 1 detected events
+[INFO] novel_class_high_tes2005: 1 detected events
+[INFO] abrupt_low_tes2006: 1 detected events
+[INFO] abrupt_med_tes2006: 1 detected events
+[INFO] abrupt_high_tes2006: 1 detected events
+[INFO] gradual_low_tes2006: 1 detected events
+[INFO] gradual_med_tes2006: 1 detected events
+[INFO] gradual_high_tes2006: 1 detected events
+[INFO] recurring_low_tes2006: 2 detected events
+[INFO] recurring_med_tes2006: 2 detected events
+[INFO] recurring_high_tes2006: 2 detected events
+[INFO] temporary_low_tes2006: 1 detected events
+[INFO] temporary_med_tes2006: 2 detected events
+[INFO] temporary_high_tes2006: 1 detected events
+[INFO] incremental_low_tes2006: 1 detected events
+[INFO] incremental_med_tes2006: 1 detected events
+[INFO] incremental_high_tes2006: 1 detected events
+[INFO] novel_class_low_tes2006: 1 detected events
+[INFO] novel_class_med_tes2006: 1 detected events
+[INFO] novel_class_high_tes2006: 1 detected events
+[INFO] stationary_low_tes2001: 1 detected events
+[INFO] stationary_low_tes2002: 0 detected events
+[INFO] stationary_low_tes2003: 0 detected events
+[INFO] stationary_low_tes2004: 0 detected events
+[INFO] stationary_low_tes2005: 0 detected events
+[INFO] stationary_low_tes2006: 0 detected events
+{
+  "data_tag": "REAL",
+  "quick": false,
+  "n_scenarios": 171,
+  "n_detected_events": 218,
+  "n_validation_events": 80,
+  "n_test_events": 138,
+  "actions": {
+    "no_op": 200,
+    "incremental": 18
+  },
+  "n_weight_vectors": 781,
+  "deployment_status": "SHADOW_ONLY"
+}
+end=2026-11-13T20:25:55+05:30
+duration_seconds=1080.1
+exit_code=0

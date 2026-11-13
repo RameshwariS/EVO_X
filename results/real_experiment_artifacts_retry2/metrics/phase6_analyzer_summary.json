@@ -1,0 +1,15 @@
+{
+ "type_accuracy": 0.5873015873015873,
+ "spearman": {
+  "abrupt": 0.94,
+  "gradual": 0.73,
+  "recurring": 0.94,
+  "temporary": 0.94,
+  "incremental": 0.77,
+  "novel_class": 0.94
+ },
+ "onset_error_median": 0.0,
+ "recurrence_second_onset": 0.9997469697928799,
+ "recurrence_others": 0.0,
+ "n_events": 126
+}

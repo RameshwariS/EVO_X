@@ -1,0 +1,14 @@
+class_id,label,ref_flows,stream_flows,first_stream_batch,first_stream_time,status
+0,BENIGN,16914,31291,0.0,2017-07-04 14:46:00,known
+1,Bot,0,30,30.0,2017-07-07 09:47:00,NOVEL (first seen in stream)
+2,DDoS,0,1802,35.0,2017-07-07 12:14:00,NOVEL (first seen in stream)
+3,DoS GoldenEye,0,917,12.0,2017-07-05 13:37:00,NOVEL (first seen in stream)
+4,DoS Hulk,0,4698,7.0,2017-07-05 12:03:00,NOVEL (first seen in stream)
+5,DoS Slowhttptest,0,38,13.0,2017-07-05 13:52:00,NOVEL (first seen in stream)
+6,DoS slowloris,0,264,4.0,2017-07-05 09:31:00,NOVEL (first seen in stream)
+7,FTP-Patator,619,0,,,known
+8,Heartbleed,0,5,12.0,2017-07-05 13:37:00,NOVEL (first seen in stream)
+9,Infiltration,0,5,21.0,2017-07-06 10:51:00,NOVEL (first seen in stream)
+10,PortScan,0,2932,29.0,2017-07-07 09:19:00,NOVEL (first seen in stream)
+11,SSH-Patator,468,0,,,known
+12,Web Attack - Brute Force,0,22,24.0,2017-07-06 13:40:00,NOVEL (first seen in stream)

@@ -1,0 +1,16 @@
+start=2026-11-13T19:17:18+05:30
+command=.venv/bin/python -m evox check-data --raw-dir data/raw/TrafficLabelling
+8 file(s), in the order they will be replayed:
+  Monday-WorkingHours.pcap_ISCX.csv                            cols= 85 Label=Y Timestamp=Y  sample='03/07/2017 08:55:58' parsed=100%
+  Tuesday-WorkingHours.pcap_ISCX.csv                           cols= 85 Label=Y Timestamp=Y  sample='4/7/2017 8:54' parsed=100%
+  Wednesday-workingHours.pcap_ISCX.csv                         cols= 85 Label=Y Timestamp=Y  sample='5/7/2017 8:42' parsed=100%
+  Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv       cols= 85 Label=Y Timestamp=Y  sample='6/7/2017 8:59' parsed=100%
+  Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv  cols= 85 Label=Y Timestamp=Y  sample='6/7/2017 1:00' parsed=100%
+  Friday-WorkingHours-Morning.pcap_ISCX.csv                    cols= 85 Label=Y Timestamp=Y  sample='7/7/2017 8:59' parsed=100%
+  Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv         cols= 85 Label=Y Timestamp=Y  sample='7/7/2017 1:00' parsed=100%
+  Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv             cols= 85 Label=Y Timestamp=Y  sample='7/7/2017 3:30' parsed=100%
+
+PREFLIGHT: OK
+end=2026-11-13T19:17:19+05:30
+duration_seconds=0.7
+exit_code=0

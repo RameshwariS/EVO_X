@@ -1,0 +1,16 @@
+start=2026-11-13T19:12:22+05:30
+[WARNING] SYNTHETIC data in use -- validates the pipeline only; do NOT report these numbers.
+[INFO] Dedup: 60005 -> 60005 rows (0 feature+label duplicates removed)
+[WARNING] Timestamp 12-hour quirk detected: shifting 27330 flows with hour<8 by +12h.
+[INFO] Stream split -> ref_train=14400 ref_val=3601 live_stream=42004 (ordering: timestamp)
+[INFO] Saved stream to data/processed/cicids2017_stream
+[INFO]   [PASS] shapes_consistent 21 features
+[INFO]   [PASS] all_values_finite no NaN/inf in any split
+[INFO]   [PASS] labels_in_range 13 classes
+[INFO]   [PASS] benign_is_class_0 
+[INFO]   [PASS] time_monotonic reference+stream timestamps non-decreasing
+[INFO]   [PASS] reference_precedes_stream ref ends 2017-07-04 14:46:00, stream starts 2017-07-04 14:46:00
+[INFO]   [PASS] scaler_fit_on_ref_train_only ref_train mean~0, std~1 on non-constant features
+[INFO] Novel-class share of live stream: 25.5%
+[INFO] Reports: {'class_timeline': '/media/shruti/3E2AA2792AA22E39/EVO_X/results/metrics/phase2_class_timeline.csv', 'batch_composition': '/media/shruti/3E2AA2792AA22E39/EVO_X/results/metrics/phase2_batch_composition.csv', 'summary': '/media/shruti/3E2AA2792AA22E39/EVO_X/results/metrics/phase2_stream_summary.json', 'figure': '/media/shruti/3E2AA2792AA22E39/EVO_X/results/figures/phase2_stream_overview.png'}
+end=2026-11-13T19:12:23+05:30\nexit_code=0\n

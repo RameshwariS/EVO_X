@@ -1,0 +1,19 @@
+start=2026-11-13T19:54:46+05:30
+command=.venv/bin/python -m evox detect --stream-dir data/processed/cicids2017_stream_real
+[INFO] [REAL] 56 validation / 110 test scenarios (label delay k=2 batches, tolerance 10)
+[INFO] [val] 25/56 scenarios prepared
+[INFO] [val] 50/56 scenarios prepared
+[INFO] tuned adwin_err  -> {'adwin_delta': 0.05}  (J=0.788 det=0.84 delay=6.8 FA/1000=2.0)
+[INFO] tuned ph_err     -> {'ph_delta': 0.002, 'ph_threshold': 0.05}  (J=0.689 det=0.81 delay=9.3 FA/1000=5.1)
+[INFO] tuned psi        -> {'psi_threshold': 0.05}  (J=0.904 det=0.90 delay=0.4 FA/1000=0.0)
+[INFO] tuned mmd        -> {'mmd_mult': 3.0}  (J=0.874 det=0.92 delay=4.8 FA/1000=1.8)
+[INFO] tuned adwin_conf -> {'adwin_conf_delta': 0.002}  (J=0.979 det=0.98 delay=1.0 FA/1000=0.1)
+[INFO] fusion tuned -> weights {'adwin_err': 1.0, 'ph_err': 0.25, 'psi': 1.0, 'mmd': 0.25} theta 0.50 (J=0.981 det=1.00 delay=3.8 FA/1000=0.6)
+[INFO] frozen config written; building TEST scenarios now
+[INFO] [test] 25/110 scenarios prepared
+[INFO] [test] 50/110 scenarios prepared
+[INFO] [test] 75/110 scenarios prepared
+[INFO] [test] 100/110 scenarios prepared
+end=2026-11-13T19:59:53+05:30
+duration_seconds=306.8
+exit_code=-9

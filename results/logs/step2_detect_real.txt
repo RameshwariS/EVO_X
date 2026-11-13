@@ -1,0 +1,7 @@
+start=2026-11-13T19:15:10+05:30
+command=.venv/bin/python -m evox detect --stream-dir data/processed/cicids2017_stream_real
+[INFO] [REAL] 56 validation / 110 test scenarios (label delay k=2 batches, tolerance 10)
+[INFO] [val] 25/56 scenarios prepared
+end=2026-11-13T19:16:30+05:30
+duration_seconds=80.1
+exit_code=-9
