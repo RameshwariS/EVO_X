@@ -1,0 +1,18 @@
+{
+  "data_tag": "REAL",
+  "quick": false,
+  "algorithm": "random_forest",
+  "test_scenarios": 114,
+  "systems": 10,
+  "runs": 1140,
+  "gate_vectors": 48,
+  "promotions": 778,
+  "rejections": 97,
+  "rollbacks": 44,
+  "hypotheses": {
+    "H1": "inconclusive",
+    "H2": "inconclusive",
+    "H3": "inconclusive",
+    "H4": "inconclusive"
+  }
+}

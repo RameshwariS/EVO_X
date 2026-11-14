@@ -1,0 +1,3 @@
+dataset,algorithm,data_tag,quick,n_seeds,run_dir
+CICIDS2017,random_forest,REAL,False,6,results/runs/rf_phase_c
+UNSW-NB15,random_forest,REAL,False,6,results/runs/unsw_rf_phase_c

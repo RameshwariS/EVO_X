@@ -1,0 +1,124 @@
+{
+  "data_tag": "REAL",
+  "quick": false,
+  "algorithm": "random_forest",
+  "python": "3.12.14",
+  "args": {
+    "synthetic": false,
+    "quick": false,
+    "model": "random_forest",
+    "stream_dir": "data/processed/unsw_nb15_stream",
+    "detector_config": "results/unsw_workspace/metrics/phase6_tuned_config.json",
+    "output_dir": "results/runs/unsw_rf_phase_b",
+    "trees": 60,
+    "reference_cap": 6000,
+    "holdout_cap": 512,
+    "batch_size": 500,
+    "mmd_samples": 200,
+    "mmd_null": 40,
+    "analysis_wait": 8,
+    "recent_batches": 12,
+    "label_delay": 2,
+    "labelled_fraction": 1.0,
+    "budget_seconds": 60.0,
+    "transport": "memory",
+    "save_candidates": false
+  },
+  "package_versions": {
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.4.1",
+    "scipy": "1.18.1",
+    "river": "0.26.1",
+    "joblib": "1.6.0"
+  },
+  "validation_seeds": [
+    1001,
+    1002,
+    1003
+  ],
+  "test_seeds": [
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006
+  ],
+  "thresholds": {
+    "low_magnitude": 1.0,
+    "high_magnitude": 3.0,
+    "short_persistence": 2,
+    "long_persistence": 10,
+    "recurrence": 0.9,
+    "novelty": 0.2
+  },
+  "full_strategy_config": {
+    "recent_capacity": 2048,
+    "memory_capacity": 2048,
+    "selection_capacity": 1024,
+    "stale_after_batches": 30,
+    "retain_fraction": 0.5,
+    "boosting_rounds": 20
+  },
+  "proxy_strategy_config": {
+    "recent_capacity": 256,
+    "memory_capacity": 256,
+    "selection_capacity": 256,
+    "stale_after_batches": 30,
+    "retain_fraction": 0.5,
+    "boosting_rounds": 20
+  },
+  "label_policy": {
+    "delay_batches": 2,
+    "labelled_fraction": 1.0,
+    "seed": 0
+  },
+  "weight_grid": [
+    0,
+    0.25,
+    0.5,
+    1
+  ],
+  "objective": "mean(0.5*(audit_recent_macro_f1 + audit_historical_macro_f1) - 0.05*normalized_cost)",
+  "split": "source-flow grouped 60/20/20 train/proxy/audit; historical validation split in half",
+  "cost_model": "median validation proxy seconds/row * final training rows; validation-only added latency",
+  "unnecessary_update": "candidate new-data macro-F1 gain < 0.01 on independent evaluation; Phase C also counts gate rejections",
+  "no_automatic_promotion": true,
+  "detector_config_sha256": "afe1b3c9f78d467ba3fbd4dd913834edbba837d171ef636fd9582419f3031436",
+  "source_meta": {
+    "seed": 0,
+    "within_class": "random",
+    "train_frac": 0.4,
+    "min_flows": 120,
+    "n_train": 809864,
+    "n_val": 202463,
+    "pool_sizes": {
+      "validation": {
+        "BENIGN": 484709,
+        "Analysis": 412,
+        "Backdoor": 398,
+        "DoS": 1277,
+        "Exploits": 6760,
+        "Fuzzers": 5143,
+        "Generic": 4622,
+        "Reconnaissance": 2438,
+        "Shellcode": 365,
+        "Worms": 43
+      },
+      "test": {
+        "BENIGN": 484710,
+        "Analysis": 413,
+        "Backdoor": 398,
+        "DoS": 1278,
+        "Exploits": 6761,
+        "Fuzzers": 5144,
+        "Generic": 4623,
+        "Reconnaissance": 2439,
+        "Shellcode": 365,
+        "Worms": 43
+      }
+    }
+  }
+}

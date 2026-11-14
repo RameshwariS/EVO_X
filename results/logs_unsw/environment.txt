@@ -1,0 +1,6 @@
+python=Python 3.12.14
+os=Linux shrutisPC 6.8.0-149-generic #149~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Wed Oct 28 20:58:45 UTC  x86_64 x86_64 x86_64 GNU/Linux
+cpu=CPU(s):                                  12;Model name:                              12th Gen Intel(R) Core(TM) i5-12450H;NUMA node0 CPU(s):                       0-11;
+ram=15Gi
+git rev-parse HEAD=unavailable (not a git repository)
+git status --short=unavailable (not a git repository)

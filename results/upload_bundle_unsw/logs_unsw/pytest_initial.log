@@ -1,0 +1,5 @@
+start=2026-11-13T23:20:06+05:30
+command=.venv/bin/python -m pytest tests -q
+end=2026-11-13T23:20:47+05:30
+exit_code=0
+result=258 passed, 1 skipped

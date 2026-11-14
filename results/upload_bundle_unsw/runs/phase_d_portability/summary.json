@@ -1,0 +1,26 @@
+{
+  "reference_dataset": "CICIDS2017",
+  "pipeline_check_only": false,
+  "runs": [
+    {
+      "dataset": "CICIDS2017",
+      "algorithm": "random_forest",
+      "data_tag": "REAL",
+      "quick": false,
+      "n_seeds": 6,
+      "run_dir": "results/runs/rf_phase_c"
+    },
+    {
+      "dataset": "UNSW-NB15",
+      "algorithm": "random_forest",
+      "data_tag": "REAL",
+      "quick": false,
+      "n_seeds": 6,
+      "run_dir": "results/runs/unsw_rf_phase_c"
+    }
+  ],
+  "verdicts": {
+    "CICIDS2017/random_forest": "reference",
+    "UNSW-NB15/random_forest": "none"
+  }
+}

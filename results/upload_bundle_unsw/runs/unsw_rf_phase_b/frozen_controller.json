@@ -1,0 +1,66 @@
+{
+  "data_tag": "REAL",
+  "weights": {
+    "gain": 0.0,
+    "forgetting": 0.0,
+    "cost": 0.0,
+    "fpr": 0.0,
+    "latency": 1.0
+  },
+  "thresholds": {
+    "low_magnitude": 1.0,
+    "high_magnitude": 3.0,
+    "short_persistence": 2,
+    "long_persistence": 10,
+    "recurrence": 0.9,
+    "novelty": 0.2
+  },
+  "cost_scale": 2.2640869384743083,
+  "latency_scale": 0.10543164208343114,
+  "profiles": {
+    "incremental": {
+      "training_seconds_per_row": 0.0006311614316381053,
+      "added_latency_ms_per_1k": 0.10543164208343114
+    },
+    "replay": {
+      "training_seconds_per_row": 0.0005551954238534351,
+      "added_latency_ms_per_1k": 0.0
+    },
+    "strategic_selection": {
+      "training_seconds_per_row": 0.001003584333986396,
+      "added_latency_ms_per_1k": 0.0
+    },
+    "full_retrain": {
+      "training_seconds_per_row": 0.0009985209355463098,
+      "added_latency_ms_per_1k": 0.0
+    }
+  },
+  "validation_seeds": [
+    1001,
+    1002,
+    1003
+  ],
+  "algorithm": "random_forest",
+  "label_policy": {
+    "delay_batches": 2,
+    "labelled_fraction": 1.0,
+    "seed": 0
+  },
+  "full_strategy_config": {
+    "recent_capacity": 2048,
+    "memory_capacity": 2048,
+    "selection_capacity": 1024,
+    "stale_after_batches": 30,
+    "retain_fraction": 0.5,
+    "boosting_rounds": 20
+  },
+  "proxy_strategy_config": {
+    "recent_capacity": 256,
+    "memory_capacity": 256,
+    "selection_capacity": 256,
+    "stale_after_batches": 30,
+    "retain_fraction": 0.5,
+    "boosting_rounds": 20
+  },
+  "written_before_test_scenarios_built": true
+}

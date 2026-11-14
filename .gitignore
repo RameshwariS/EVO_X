@@ -11,6 +11,10 @@ htmlcov/
 # Raw/processed datasets and newly generated experiment outputs stay local.
 data/raw/*
 !data/raw/README.md
+data/raw_unsw/UNSW-NB15_1.csv
+data/raw_unsw/UNSW-NB15_2.csv
+data/raw_unsw/UNSW-NB15_3.csv
+data/raw_unsw/UNSW-NB15_4.csv
 data/processed/
 results/runs/
 results/phase_b_*/

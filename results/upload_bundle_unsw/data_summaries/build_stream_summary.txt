@@ -1,0 +1,15 @@
+start=2026-11-13T23:21:28+05:30
+[INFO] UNSW-NB15: dropping id/categorical columns ['srcip', 'sport', 'dstip', 'dsport', 'Ltime', 'proto', 'state', 'service', 'attack_cat', 'Label', 'Stime']
+[INFO] Dedup: 2540047 -> 2024668 rows (515379 feature+label duplicates removed)
+[INFO] Stream split -> ref_train=485920 ref_val=121480 live_stream=1417268 (ordering: timestamp)
+[INFO] Saved stream to /media/shruti/3E2AA2792AA22E39/EVO_X/data/processed/unsw_nb15_stream
+[INFO]   [PASS] shapes_consistent 38 features
+[INFO]   [PASS] all_values_finite no NaN/inf in any split
+[INFO]   [PASS] labels_in_range 10 classes
+[INFO]   [PASS] benign_is_class_0 
+[INFO]   [PASS] time_monotonic reference+stream timestamps non-decreasing
+[INFO]   [PASS] reference_precedes_stream ref ends 2015-01-22 19:09:38, stream starts 2015-01-22 19:09:38
+[INFO]   [PASS] scaler_fit_on_ref_train_only ref_train mean~0, std~1 on non-constant features
+[INFO] Stream saved to /media/shruti/3E2AA2792AA22E39/EVO_X/data/processed/unsw_nb15_stream; novel-class share of live stream 0.0%
+end=2026-11-13T23:22:06+05:30
+exit_code=0

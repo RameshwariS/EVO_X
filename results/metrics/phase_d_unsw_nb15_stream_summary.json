@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "dataset": "UNSW-NB15",
+    "ordering_source": "timestamp",
+    "reference_fraction": 0.3,
+    "reference_val_fraction": 0.2,
+    "batch_size": 1000,
+    "n_total": 2024668,
+    "n_ref_train": 485920,
+    "n_ref_val": 121480,
+    "n_stream": 1417268,
+    "dropped_constant_features": [],
+    "deduplicated": true
+  },
+  "n_features": 38,
+  "classes": [
+    "BENIGN",
+    "Analysis",
+    "Backdoor",
+    "DoS",
+    "Exploits",
+    "Fuzzers",
+    "Generic",
+    "Reconnaissance",
+    "Shellcode",
+    "Worms"
+  ],
+  "reference_class_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "novel_class_stream_flows": 0,
+  "novel_class_stream_share": 0.0,
+  "n_batches": 1418,
+  "validation": {
+    "shapes_consistent": {
+      "passed": true,
+      "detail": "38 features"
+    },
+    "all_values_finite": {
+      "passed": true,
+      "detail": "no NaN/inf in any split"
+    },
+    "labels_in_range": {
+      "passed": true,
+      "detail": "10 classes"
+    },
+    "benign_is_class_0": {
+      "passed": true,
+      "detail": ""
+    },
+    "time_monotonic": {
+      "passed": true,
+      "detail": "reference+stream timestamps non-decreasing"
+    },
+    "reference_precedes_stream": {
+      "passed": true,
+      "detail": "ref ends 2015-01-22 19:09:38, stream starts 2015-01-22 19:09:38"
+    },
+    "scaler_fit_on_ref_train_only": {
+      "passed": true,
+      "detail": "ref_train mean~0, std~1 on non-constant features"
+    }
+  }
+}

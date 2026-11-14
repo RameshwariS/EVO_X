@@ -1,0 +1,5 @@
+start=2026-11-13T23:20:52+05:30
+command=.venv/bin/python -m evox generalize adapter-check --dataset unsw-nb15 --raw-dir data/raw_unsw --json results/unsw_workspace/adapter_check.json
+exit_code=0
+result=PASS all checks; 2,540,047 rows; 9 attack classes; 38 numeric features; 100% timestamps parse; 27-day span; 4.36% missing; 0 constants
+end=2026-11-13T23:21:04+05:30

@@ -1,0 +1,69 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "has_label_column",
+      "ok": true,
+      "detail": "Label"
+    },
+    {
+      "name": "has_benign",
+      "ok": true,
+      "detail": "2218764 benign flows"
+    },
+    {
+      "name": "at_least_two_attack_classes",
+      "ok": true,
+      "detail": "9 attack classes"
+    },
+    {
+      "name": "attack_classes_with_min_flows",
+      "ok": true,
+      "detail": "9 classes have >= 120 flows"
+    },
+    {
+      "name": "timestamps_parse",
+      "ok": true,
+      "detail": "100.00% parsed"
+    },
+    {
+      "name": "timestamps_span_time",
+      "ok": true,
+      "detail": "span 27 days 00:31:31"
+    },
+    {
+      "name": "numeric_features_present",
+      "ok": true,
+      "detail": "38 numeric feature columns"
+    },
+    {
+      "name": "nan_share_reasonable",
+      "ok": true,
+      "detail": "4.36% missing"
+    },
+    {
+      "name": "few_constant_features",
+      "ok": true,
+      "detail": "0 constant columns"
+    }
+  ],
+  "summary": {
+    "rows": 2540047,
+    "n_features": 38,
+    "class_counts": {
+      "BENIGN": 2218764,
+      "Generic": 215481,
+      "Exploits": 44525,
+      "Fuzzers": 24246,
+      "DoS": 16353,
+      "Reconnaissance": 13987,
+      "Analysis": 2677,
+      "Backdoor": 2329,
+      "Shellcode": 1511,
+      "Worms": 174
+    },
+    "nan_share": 0.04359537027215804,
+    "constant_features": [],
+    "timestamp_ok": true
+  }
+}

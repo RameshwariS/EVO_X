@@ -1,0 +1,16 @@
+  File: data/processed/cicids2017_stream/stream.npz
+  Size: 3975489   	Blocks: 7768       IO Block: 4096   regular file
+Device: 10303h/66307d	Inode: 1863635     Links: 1
+Access: (0777/-rwxrwxrwx)  Uid: ( 1000/  shruti)   Gid: ( 1000/  shruti)
+Access: 2026-11-13 19:12:23.087952700 +0530
+Modify: 2026-11-13 19:12:23.242050000 +0530
+Change: 2026-11-13 19:12:23.242050000 +0530
+ Birth: -
+  File: data/processed/cicids2017_stream/stream_meta.json
+  Size: 1110      	Blocks: 8          IO Block: 4096   regular file
+Device: 10303h/66307d	Inode: 1863636     Links: 1
+Access: (0777/-rwxrwxrwx)  Uid: ( 1000/  shruti)   Gid: ( 1000/  shruti)
+Access: 2026-11-13 19:12:48.090210900 +0530
+Modify: 2026-11-13 19:12:23.242333800 +0530
+Change: 2026-11-13 19:12:23.242333800 +0530
+ Birth: -

@@ -1,0 +1,13 @@
+{
+  "data_tag": "REAL",
+  "quick": false,
+  "n_scenarios": 171,
+  "n_detected_events": 193,
+  "n_validation_events": 66,
+  "n_test_events": 127,
+  "actions": {
+    "no_op": 193
+  },
+  "n_weight_vectors": 781,
+  "deployment_status": "SHADOW_ONLY"
+}

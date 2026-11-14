@@ -1,0 +1,22 @@
+{
+  "H1": {
+    "claim": "Strategy selection improves detection relative to fixed policies",
+    "status": "inconclusive",
+    "evidence": "Seed-paired macro-F1 comparisons with Holm correction; see paired_statistics.csv."
+  },
+  "H2": {
+    "claim": "Fewer updates while F1 stays within 0.02 of the best fixed policy",
+    "status": "inconclusive",
+    "evidence": "Descriptive F1 tolerance: False; Holm-adjusted non-inferiority: False; significant update reduction: False."
+  },
+  "H3": {
+    "claim": "The gate reduces harmful promotions versus the no-gate ablation",
+    "status": "inconclusive",
+    "evidence": "Finite-horizon frozen-parent counterfactual harmful-promotion counts; not a full alternate-policy replay."
+  },
+  "H4": {
+    "claim": "Less historical forgetting than recent-only full retraining",
+    "status": "inconclusive",
+    "evidence": "Paired historical-anchor forgetting versus recent-only retraining."
+  }
+}

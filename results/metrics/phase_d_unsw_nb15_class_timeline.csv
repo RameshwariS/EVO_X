@@ -1,0 +1,11 @@
+class_id,label,ref_flows,stream_flows,first_stream_batch,first_stream_time,status
+0,BENIGN,594590,1344246,0,2015-01-22 19:09:38,known
+1,Analysis,281,1369,408,2015-01-23 00:25:01,known
+2,Backdoor,277,1312,408,2015-01-23 00:25:01,known
+3,DoS,803,4307,408,2015-01-23 00:25:01,known
+4,Exploits,4020,23021,408,2015-01-23 00:25:01,known
+5,Fuzzers,3893,16680,408,2015-01-23 00:25:01,known
+6,Generic,1894,16593,408,2015-01-23 00:25:01,known
+7,Reconnaissance,1395,8358,408,2015-01-23 00:25:01,known
+8,Shellcode,223,1235,410,2015-02-18 00:38:16,known
+9,Worms,24,147,417,2015-02-18 00:42:14,known

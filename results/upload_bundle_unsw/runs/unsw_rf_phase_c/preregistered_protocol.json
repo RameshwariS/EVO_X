@@ -1,0 +1,186 @@
+{
+  "data_tag": "REAL",
+  "quick": false,
+  "algorithm": "random_forest",
+  "args": {
+    "controller_config": "results/runs/unsw_rf_phase_b/frozen_controller.json",
+    "detector_config": null,
+    "synthetic": false,
+    "quick": false,
+    "model": "random_forest",
+    "stream_dir": "data/processed/unsw_nb15_stream",
+    "output_dir": "results/runs/unsw_rf_phase_c",
+    "systems": [
+      "static",
+      "always_retrain",
+      "always_incremental",
+      "always_replay",
+      "ssf_inspired",
+      "active_incremental",
+      "evox",
+      "evox_no_gate",
+      "evox_rules_only",
+      "evox_utility_only"
+    ],
+    "test_seeds": [
+      2001,
+      2002,
+      2003,
+      2004,
+      2005,
+      2006
+    ],
+    "trees": null,
+    "batch_size": 500,
+    "budget_seconds": 60.0,
+    "latency_budget": 100.0
+  },
+  "replay": {
+    "model": "random_forest",
+    "trees": 60,
+    "reference_cap": 6000,
+    "holdout_cap": 512,
+    "recent_batches": 12,
+    "analysis_wait": 8,
+    "mmd_samples": 200,
+    "mmd_null": 40,
+    "counterfactual_batches": 10,
+    "training_budget": 60.0,
+    "harmful_tolerance": 0.03,
+    "recovery_tolerance": 0.02
+  },
+  "label_policy": {
+    "delay_batches": 2,
+    "labelled_fraction": 1.0,
+    "seed": 0
+  },
+  "strategy": {
+    "recent_capacity": 2048,
+    "memory_capacity": 2048,
+    "selection_capacity": 1024,
+    "stale_after_batches": 30,
+    "retain_fraction": 0.5,
+    "boosting_rounds": 20
+  },
+  "proxy_strategy": {
+    "recent_capacity": 256,
+    "memory_capacity": 256,
+    "selection_capacity": 256,
+    "stale_after_batches": 30,
+    "retain_fraction": 0.5,
+    "boosting_rounds": 20
+  },
+  "validation_seeds": [
+    1001,
+    1002,
+    1003
+  ],
+  "test_seeds": [
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006
+  ],
+  "magnitudes": [
+    "low",
+    "med",
+    "high"
+  ],
+  "systems": [
+    "static",
+    "always_retrain",
+    "always_incremental",
+    "always_replay",
+    "ssf_inspired",
+    "active_incremental",
+    "evox",
+    "evox_no_gate",
+    "evox_rules_only",
+    "evox_utility_only"
+  ],
+  "role_split": "source-grouped 50/15/15/10/10 train/proxy/gate/monitor/report",
+  "common_triggers": "frozen Phase A detector on the initial sentinel model; identical across policies",
+  "threshold_grid": {
+    "new_gain": [
+      0,
+      0.01,
+      0.02
+    ],
+    "historical_drop": [
+      0.02,
+      0.05
+    ],
+    "forgetting": [
+      0.03,
+      0.1
+    ],
+    "fpr_increase": [
+      0.005,
+      0.02
+    ],
+    "training_seconds": [
+      30.0,
+      60.0
+    ]
+  },
+  "gate_selection": "initial-parent validation pilots; independent audit gain/retention minus normalized training cost",
+  "harmful": "future reporting macro-F1 loss >0.03 or gate historical F1 loss >0.03 vs frozen parent",
+  "unnecessary": "promoted candidate future reporting macro-F1 gain <0.01",
+  "rollback": "only EVO-X policies; two released monitor batches, >=32 rows; independent monitor source groups",
+  "final_reporting": "oracle benchmark labels on independent report rows, never passed to decisions",
+  "counters": "attempts include rejected candidates; updates are promotions; rollback switches are separate",
+  "hypotheses": "seed-paired Wilcoxon with Holm correction; synthetic/quick results always inconclusive",
+  "f1_noninferiority": "one-sided paired Wilcoxon for EVO-X minus each fixed policy + 0.02; Holm adjusted",
+  "memory_measure": "10ms sampled process RSS (includes resident/native state), Python allocation peak, serialized model size",
+  "source_meta": {
+    "seed": 0,
+    "within_class": "random",
+    "train_frac": 0.4,
+    "min_flows": 120,
+    "n_train": 809864,
+    "n_val": 202463,
+    "pool_sizes": {
+      "validation": {
+        "BENIGN": 484709,
+        "Analysis": 412,
+        "Backdoor": 398,
+        "DoS": 1277,
+        "Exploits": 6760,
+        "Fuzzers": 5143,
+        "Generic": 4622,
+        "Reconnaissance": 2438,
+        "Shellcode": 365,
+        "Worms": 43
+      },
+      "test": {
+        "BENIGN": 484710,
+        "Analysis": 413,
+        "Backdoor": 398,
+        "DoS": 1278,
+        "Exploits": 6761,
+        "Fuzzers": 5144,
+        "Generic": 4623,
+        "Reconnaissance": 2439,
+        "Shellcode": 365,
+        "Worms": 43
+      }
+    }
+  },
+  "dropped_classes": [],
+  "code_sha256": "4a17b736b432e449491646981ced721e63085d8a60acb46a992178b628e3f62f",
+  "source_sha256": "2e0fa5317eff9ce9b5a38fee6dec97dba6d2429758aea7a3bad45243a9cee028",
+  "phase_b_config_sha256": "ef5faa3e1c5778408c35d2ab278040c4047fcff7e1ad01d54557a7bae0db510e",
+  "detector_sha256": "f2aebaa42f803d9ee1d05f09a5dae04e9a1cbb20b2af8efb539c30d929ce1ece",
+  "package_versions": {
+    "evo-x": "0.3.0",
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.4.1",
+    "scipy": "1.18.1",
+    "river": "0.26.1",
+    "psutil": "7.2.2"
+  }
+}

@@ -1,0 +1,4 @@
+command=.venv/bin/python -c 'from evox.config import METRICS_DIR, FIGURES_DIR, PROCESSED_DIR; print(METRICS_DIR, FIGURES_DIR, PROCESSED_DIR)'
+normal=/media/shruti/3E2AA2792AA22E39/EVO_X/results/metrics /media/shruti/3E2AA2792AA22E39/EVO_X/results/figures /media/shruti/3E2AA2792AA22E39/EVO_X/data/processed
+redirected=/media/shruti/3E2AA2792AA22E39/EVO_X/results/unsw_workspace/metrics /media/shruti/3E2AA2792AA22E39/EVO_X/results/unsw_workspace/figures /media/shruti/3E2AA2792AA22E39/EVO_X/data/processed
+result=PASS metrics and figures redirected inside results/unsw_workspace; EVOX_RESULTS_DIR scoped to detect invocation
