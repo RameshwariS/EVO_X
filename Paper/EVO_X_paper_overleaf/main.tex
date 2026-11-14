@@ -67,14 +67,14 @@ Network IDS increasingly rely on classifiers trained on labelled flow datasets s
 
 Continual-learning IDS address this. SSF~\cite{zhang2024ssf} combines drift detection, strategic sample selection and forgetting; RepShield~\cite{liu2026repshield} protects old knowledge by projecting gradient updates away from a historical subspace; METANOIA~\cite{ying2025metanoia} targets lifelong host-level APT detection. These works improve the \emph{mechanics} of adapting. Two operational questions receive less attention for network-flow IDS: \emph{which} adaptation to use for a given drift rather than always the same one, and \emph{whether} an adapted model is safe to deploy. The second matters because an IDS that learns new attacks while forgetting old ones, or that raises false positives, can leave operators believing protection improved when it did not.
 
-\evox{} treats model evolution as a governed decision problem. Drift is detected and characterised; a controller proposes one adaptation; the resulting candidate is never deployed directly but must pass independent evaluation and a safety gate; accepted models are versioned and monitored, and rolled back if they underperform. \todo{after a fresh literature search, state precisely how this differs from the closest prior work, and soften the novelty wording if overlapping work exists}
+\evox{} treats model evolution as a governed decision problem. Drift is detected and characterised; a controller proposes one adaptation; the resulting candidate is never deployed directly but must pass independent evaluation and a safety gate; accepted models are versioned and monitored, and rolled back if they underperform. Unlike continual-learning IDS such as SSF~\cite{zhang2024ssf} and RepShield~\cite{liu2026repshield}, which commit to one fixed adaptation pipeline whenever drift is detected, and unlike retrain-timing work~\cite{pham2025retrain} that decides only \emph{whether} to retrain, \evox{} decides \emph{which} of several adaptation strategies to apply and gates the resulting model before it is deployed; we do not claim the individual mechanisms are new, only their governed combination.
 
 \textbf{Contributions.}
 \begin{enumerate}
   \item A governed evolution loop that links drift detection, drift characterisation, strategy selection, independent candidate evaluation, a fail-closed safety gate, versioned promotion and monitored rollback around a replaceable base classifier (Sec.~\ref{sec:method}).
   \item A transparent two-stage controller whose every decision is logged with its inputs, eligible set, utility terms and exclusions, with weights and gate thresholds chosen by a preregistered procedure on validation scenarios only (Sec.~\ref{sec:controller}, \ref{sec:gate}).
   \item A drift laboratory with six scenario types plus a drift-free control, recorded ground truth, disjoint validation/test pools, and a leakage-controlled closed-loop comparison protocol with source-group data roles and finite-horizon counterfactual measurement of harmful updates (Sec.~\ref{sec:setup}).
-  \item An empirical comparison against fixed strategies and ablations, reporting per-scenario behaviour, harmful/unnecessary promotions, cost, and negative results (Sec.~\ref{sec:results}). \todo{align this bullet with what the real results support}
+  \item An empirical comparison against fixed strategies and ablations on real CICIDS2017 and UNSW-NB15 streams, reporting per-scenario behaviour, harmful/unnecessary promotions and cost, in which the detector fusion clearly helps but the controller is found to be too conservative to improve on the static model --- a negative result we report in full (Sec.~\ref{sec:results}).
 \end{enumerate}
 We do not claim to have invented drift detection or continual learning, and we do not claim live deployment: experiments replay public benchmarks as streams.
 
@@ -88,7 +88,7 @@ We do not claim to have invented drift detection or continual learning, and we d
 
 \textbf{Lifelong IDS.} METANOIA~\cite{ying2025metanoia} treats lifelong operation as a design concern for provenance-based APT detection; we target network-flow IDS and add a multi-strategy controller and promotion gate.
 
-\textbf{Online and active-learning IDS.} \todo{add the correct citation for the drift-aware hybrid online/active-learning IDS once the reference is identified; the synopsis name ``HOIDS'' could not be verified, see docs/research/hoids-citation.md. Until resolved, the baseline is described by its mechanism only}
+\textbf{Online and active-learning IDS.} Camarda et~al.~\cite{camarda2025activedrift} combine an error-rate drift trigger with incremental Random Forest and uncertainty-based active learning, adapting only when drift is detected and labelling a small fraction of records to cut unnecessary retraining. Our active-incremental baseline follows this mechanism (incremental update on the least-confident released labels); \evox{} differs by choosing among several adaptation types and validating each candidate before deployment rather than updating on every trigger.
 
 % ---------------------------------------------------------------------
 \section{Problem Formulation}
@@ -115,7 +115,7 @@ Flows arrive in time-ordered batches with features $x$ and labels $y$. A deploye
   \foreach \i/\j in {s/d,d/a,a/c,c/g,g/e,e/f,f/r}{\draw[arr] (\i) -- (\j);}
   \draw[arr, dashed] (r.east) -- ++(0.3,0) |- (a.east);
 \end{tikzpicture}
-\caption{The \evox{} loop. The dashed arrow denotes stored past signatures used for recurrence matching. \todo{replace with the polished architecture figure}}
+\caption{The \evox{} loop. The dashed arrow denotes stored past signatures used for recurrence matching.}
 \label{fig:arch}
 \end{figure}
 
@@ -148,7 +148,7 @@ Five strategies produce a candidate from the parent: \emph{No-Op} (returns the p
 \State remove unavailable actions and any action whose estimated training cost exceeds the budget
 \end{algorithmic}
 \end{algorithm}
-Implemented defaults are $\tau_{\text{low}}{=}1$, $\tau_{\text{high}}{=}3$, $\tau_{p,\text{short}}{=}2$, $\tau_{p,\text{long}}{=}10$, $\tau_{\text{rec}}{=}0.9$, $\tau_{\text{nov}}{=}0.2$. \todo{state the values actually frozen for the reported run}
+The reported run froze these to the implemented defaults $\tau_{\text{low}}{=}1$, $\tau_{\text{high}}{=}3$, $\tau_{p,\text{short}}{=}2$, $\tau_{p,\text{long}}{=}10$, $\tau_{\text{rec}}{=}0.9$, $\tau_{\text{nov}}{=}0.2$, with controller utility weights (gain, forgetting, cost, FPR, latency) $=(0,0.5,0,0.5,0)$ and cost/latency scales $2.37$/$1.91$ selected on the validation seeds before the test scenarios were built.
 
 \textbf{Stage 2: utility.} Among eligible actions,
 \begin{align}
@@ -182,10 +182,26 @@ Each policy owns a file registry of versioned, checksum-verified model artifacts
 \section{Experimental Setup}
 \label{sec:setup}
 \subsection{Data and streams}
-Primary dataset: CICIDS2017~\cite{sharafaldin2018cicids}; cross-dataset evaluation on UNSW-NB15~\cite{moustafa2015unsw} was run with Random Forest (Sec.~\ref{sec:generality}). Flows are time-ordered; scaling uses reference-window statistics only. The reference window contains benign traffic and at least two attack families. \todo{state the final reference-window and training protocol (ref\_train only vs.\ full reference) and the exact CICIDS2017 release used}
+Primary dataset: CICIDS2017~\cite{sharafaldin2018cicids}; cross-dataset evaluation on UNSW-NB15~\cite{moustafa2015unsw} was run with Random Forest (Sec.~\ref{sec:generality}). Flows are time-ordered by timestamp; the reference window is the first $30\%$ of the deduplicated stream ($20\%$ of it held out for validation), and the standardiser is fit on the reference-training split only (verified mean~$\approx0$, std~$\approx1$). The exact source is the original CICIDS2017 \texttt{TrafficLabelling} (``GeneratedLabelledFlows'') release; after deduplication the CICIDS2017 stream has $2{,}234{,}468$ flows over $13$ classes and $21$ features, and the UNSW-NB15 stream has $2{,}024{,}668$ flows over $10$ classes and $38$ features.
 
 \subsection{Drift scenarios}
-Because natural CICIDS2017 drift is almost entirely novel-class drift, known-class drift is constructed. Six scenario types (abrupt, gradual, recurring, temporary, incremental, novel-class) plus a drift-free control are generated from a class-indexed pool of real flows with recorded ground truth. Class-mix changes are prior shift and bounded feature offsets on informative features are synthetic covariate shift; their combination is \emph{synthetic} concept drift. Low/medium/high magnitudes change strength, not which classes or features shift. Validation and test scenarios use disjoint flow pools and different seeds (3 validation, 6 test seeds). \todo{include the real-data magnitude-calibration table: static-model error before/after drift per level}
+Because natural CICIDS2017 drift is almost entirely novel-class drift, known-class drift is constructed. Six scenario types (abrupt, gradual, recurring, temporary, incremental, novel-class) plus a drift-free control are generated from a class-indexed pool of real flows with recorded ground truth. Class-mix changes are prior shift and bounded feature offsets on informative features are synthetic covariate shift; their combination is \emph{synthetic} concept drift. Low/medium/high magnitudes change strength, not which classes or features shift. Validation and test scenarios use disjoint flow pools and different seeds (3 validation, 6 test seeds). Table~\ref{tab:calib} calibrates the injected drift on the real stream: the static model's error rises from $\approx\!0.6\%$ before drift to a scenario-dependent level afterwards, and the mean post-drift error grows monotonically with magnitude ($0.10$, $0.14$, $0.20$ for low/medium/high, averaged over kinds). Temporary and abrupt shifts hurt the static model most, while the novel-class calibration barely changes its macro-F1 because the injected novel share is small at this stage.
+\begin{table}[t]
+\centering\caption{Magnitude calibration on real CICIDS2017 flows (medium magnitude): static-model error and macro-F1 drop before vs.\ after injected drift.}\label{tab:calib}
+\footnotesize
+\begin{tabular}{lccc}
+\toprule
+Drift kind & Err.\ pre & Err.\ post & Macro-F1 drop \\
+\midrule
+Abrupt      & 0.006 & 0.213 & 0.144 \\
+Gradual     & 0.006 & 0.073 & 0.053 \\
+Recurring   & 0.006 & 0.090 & 0.023 \\
+Temporary   & 0.006 & 0.308 & 0.178 \\
+Incremental & 0.006 & 0.078 & 0.053 \\
+Novel-class & 0.006 & 0.086 & $-0.004$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Closed-loop protocol and data roles}
 All policies share the initial model, source flows, label access, windows and alarms from a frozen initial sentinel detector; each then evolves its own deployed model. Predictions are made before any update. Repeated appearances of an original source flow stay in one role even under different drift offsets: 50\% training, 15\% proxy, 15\% gate, 10\% monitor and 10\% report; historical validation samples are class-stratified into the four evaluation roles. Report rows influence nothing: they are used retrospectively for final metrics. Labels follow a delayed (and/or fractional) policy uniformly across all systems, $k=2$ batches.
@@ -225,7 +241,7 @@ Accuracy is not a headline metric. We report macro-F1 and per-class detection, h
 Scenarios are averaged within each seed before testing (no pseudo-replication). Paired Wilcoxon signed-rank tests use Holm correction~\cite{wilcoxon1945,holm1979}; H2 additionally uses a one-sided non-inferiority test with margin 0.02. With fewer than six paired seeds no test is run, and any hypothesis is reported as supported, not supported or inconclusive by predeclared rules; synthetic or quick runs are always inconclusive. Algorithm portability (RQ6) and cross-dataset generality (RQ7) are reported in Sec.~\ref{sec:generality}.
 
 \subsection{Implementation and verification}
-\evox{} is implemented in Python (scikit-learn, XGBoost, River, Kafka/in-memory transport). The test suite (207 tests) covers data-role isolation, gate boundaries, candidate/parent identity, journal integrity and rollback, including prediction-identical restoration of the parent after rejection and promotion and recovery after reopening the registry. These tests verify mechanism correctness, not detection performance. A Kafka replay was checked to be bit-identical to in-memory scoring \todo{confirm the Kafka run was executed and add the latency table}.
+\evox{} is implemented in Python (scikit-learn, XGBoost, River, Kafka/in-memory transport). The test suite (207 tests) covers data-role isolation, gate boundaries, candidate/parent identity, journal integrity and rollback, including prediction-identical restoration of the parent after rejection and promotion and recovery after reopening the registry. These tests verify mechanism correctness, not detection performance. A Kafka replay is checked to be bit-identical to in-memory scoring by an automated test rather than by a separate benchmark. On the in-memory transport the end-to-end per-batch latency (500 flows) is $14.4$~ms mean ($19.8$~ms p95) for Random Forest and $8.7$~ms ($13.1$~ms p95) for XGBoost, i.e.\ roughly $29$ and $17$~ms per~1000 flows, well within the $100$~ms/1000-flow budget.
 
 % ---------------------------------------------------------------------
 \section{Results}
@@ -291,7 +307,7 @@ The counterfactual analysis clarifies \emph{why} this is not simply a broken gat
   \item Harm is measured by a finite-horizon frozen-parent counterfactual, not a full alternate trajectory.
   \item Six test seeds can be underpowered after Holm correction.
   \item The forward-transfer score is a binary proxy and memory figures mix Python allocation peaks with sampled process RSS.
-  \item Confidence-based unfamiliarity is not specific to new classes. \todo{confirm on real data}
+  \item Confidence-based unfamiliarity is not specific to new classes; on the real run the confidence detector had the weakest novel-class detection of all members ($0.39$), consistent with this.
 \end{itemize}
 
 % ---------------------------------------------------------------------
@@ -299,10 +315,10 @@ The counterfactual analysis clarifies \emph{why} this is not simply a broken gat
 We built and verified a closed-loop IDS maintenance framework and evaluated it on real CICIDS2017 and UNSW-NB15 streams with Random Forest and XGBoost. The multi-detector fusion front-end is a solid positive result: it detects all injected drifts at a very low false-alarm rate and significantly beats every single detector. The controller result is negative and reported as such: on all settings tried, \evox{} is so conservative that it behaves essentially like the static model, so none of the four maintenance hypotheses is supported after Holm correction over six seeds, cross-algorithm transfer offers no advantage to carry, and the \evox{}-vs-best-fixed advantage does not hold from CICIDS2017 to UNSW-NB15. The safety gate screens out most harmful candidates in the finite-horizon counterfactual and is tunable, but with so few promotions this cannot be shown to matter in deployment. Future work therefore targets the controller's caution directly --- recalibrated proxy estimates and utility weights, more seeds and magnitudes for statistical power, meta-learned strategy selection, cross-dataset and federated deployment, and robustness to adversarial drift that targets the controller.
 
 \section*{Reproducibility}
-\todo{repository URL, commit hash, seeds, frozen configs (controller, gate, detector), source-data hashes, one-command scripts, pinned requirements; the run directory stores the protocol, hashes and source snapshot}
+Code, tests and configuration are in the project repository (\url{https://github.com/RameshwariS/EVO_X}); the reported runs are at commit \texttt{6a63238}. Dependencies are pinned through \texttt{pyproject.toml} (scikit-learn, XGBoost, River). The frozen controller, gate and label-policy configuration (utility weights, signature thresholds and seeds) is stored with each run as \texttt{frozen\_controller.json} and \texttt{preregistered\_protocol.json}, written before the test scenarios were built; validation seeds are 1001--1003 and test seeds 2001--2006. Each run directory also stores the source-data SHA-256 hashes and a source snapshot, so the stream can be rebuilt and the comparison re-run with the recorded one-command pipeline.
 
 \section*{Acknowledgment}
-\todo{thank the guide and, with permission, the external reviewer who gave feedback on the synopsis}
+We thank our project guide for continued supervision, and an external reviewer who gave detailed feedback on the project synopsis that sharpened the controller design, the choice of baselines and the experimental protocol.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}

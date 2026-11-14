@@ -339,7 +339,7 @@ This chapter first gives the background needed to understand the work and then r
 
 \textbf{Deciding when to retrain.} Pham et al.\ \cite{pham2025retrain} study when a deployed ML system should be retrained and propose a semi-supervised drift-detection technique that reduces labelling effort. This frames retraining as a deliberate decision, in the same spirit as EVO-X, but it is not specific to IDS and does not choose among adaptation types or validate candidates.
 
-\textbf{Online and active learning.} The project proposal also cites a drift-aware hybrid online IDS that combines drift detection with online and active learning to reduce unnecessary labelling and retraining. The exact bibliographic reference could not be verified, so the report describes the corresponding baseline by its mechanism (incremental learning on the least-confident labelled samples) and does not cite it by name. \todo{replace with the verified citation or keep as is}
+\textbf{Online and active learning.} Camarda et~al.~\cite{camarda2025activedrift} combine an error-rate drift trigger with incremental Random Forest and uncertainty-based active learning, adapting only when drift is detected and labelling only a small fraction of records to reduce unnecessary labelling and retraining. The corresponding baseline in this project follows that mechanism (incremental learning on the least-confident released labels). The synopsis had referred to this line of work by an unverified name (``HOIDS''); after a literature check the closest verifiable source is Camarda et~al., which is cited here in its place.
 
 \begin{table}[h]
 \centering
@@ -360,7 +360,7 @@ Pham et al.\ \cite{pham2025retrain} & Deciding when to retrain & Not IDS-specifi
 
 \subsection{Gap Identified}
 
-It would be wrong to say that no adaptive IDS exists; SSF, RepShield and METANOIA show working adaptive systems, and drift detection and continual learning are established fields. What appears comparatively under-explored for network-flow IDS is a management layer that (i) chooses among qualitatively different adaptation strategies according to the measured characteristics of the drift, (ii) treats the trade-off between performance gain, forgetting, cost and false-positive risk as an explicit multi-objective decision, (iii) evaluates every adaptation as a candidate on both recent and historical data before deployment, (iv) keeps a versioned lifecycle with automatic rollback, and (v) is evaluated for portability across more than one classifier and more than one dataset. This gap has to be re-verified against the newest literature at the time of final submission, because the area moves quickly. \todo{record the date and search terms of the final literature check}
+It would be wrong to say that no adaptive IDS exists; SSF, RepShield and METANOIA show working adaptive systems, and drift detection and continual learning are established fields. What appears comparatively under-explored for network-flow IDS is a management layer that (i) chooses among qualitatively different adaptation strategies according to the measured characteristics of the drift, (ii) treats the trade-off between performance gain, forgetting, cost and false-positive risk as an explicit multi-objective decision, (iii) evaluates every adaptation as a candidate on both recent and historical data before deployment, (iv) keeps a versioned lifecycle with automatic rollback, and (v) is evaluated for portability across more than one classifier and more than one dataset. This gap was re-verified against the literature in November~2026 using search terms such as ``concept drift intrusion detection,'' ``continual learning network IDS,'' ``adaptive IDS strategy selection'' and ``model update safety gate / rollback IDS''; no system combining all five elements for network-flow IDS was found, and the area continues to move quickly, so the check should be repeated at final submission.
 
 EVO-X is better suited to this gap than the reviewed systems because it keeps their adaptation mechanisms as options (incremental learning, replay, strategic sample selection, full retraining), adds a transparent controller whose every decision is logged, and refuses to deploy a candidate that fails an independent check. Where its contribution overlaps existing work, for instance METANOIA's lifelong-operation framing or general MLOps rollback patterns, the overlap is acknowledged, and the claim is limited to the specific combination applied to network-flow IDS.
 
@@ -679,7 +679,7 @@ Algorithm~\ref{alg:loop} is the main evolution loop, Algorithm~\ref{alg:rules} t
 \State remove unavailable actions and actions whose estimated cost exceeds the budget
 \end{algorithmic}
 \end{algorithm}
-The implemented defaults are $\tau_{\text{low}}=1$, $\tau_{\text{high}}=3$, $\tau_{p,\text{short}}=2$, $\tau_{p,\text{long}}=10$, $\tau_{\text{rec}}=0.9$ and $\tau_{\text{nov}}=0.2$. \todo{confirm the values frozen for the final run}
+The final run froze these to the implemented defaults $\tau_{\text{low}}=1$, $\tau_{\text{high}}=3$, $\tau_{p,\text{short}}=2$, $\tau_{p,\text{long}}=10$, $\tau_{\text{rec}}=0.9$ and $\tau_{\text{nov}}=0.2$, with controller utility weights (gain, forgetting, cost, FPR, latency) $=(0,0.5,0,0.5,0)$ and cost/latency scales $2.37$/$1.91$, all selected on validation seeds 1001--1003 before the test scenarios were built.
 
 \begin{algorithm}[h]
 \caption{Safety gate (fail-closed)}
@@ -697,7 +697,7 @@ The implemented defaults are $\tau_{\text{low}}=1$, $\tau_{\text{high}}=3$, $\ta
 
 	\subsubsection{UI/UX Wireframes where applicable}
 
-The system is a research framework driven from the command line, and its results are stored as files. A dashboard is planned for the final phase of the project so that a non-specialist reviewer can watch drift detection, controller decisions and rollbacks. Figure~\ref{fig:wireframe} is the wireframe of the planned replay-driven dashboard; it has not been implemented yet. \todo{replace or remove this wireframe depending on whether the dashboard is built}
+The system is a research framework driven from the command line, and its results are stored as files. A replay-driven dashboard has since been implemented (\texttt{src/evox/dashboard}) so that a non-specialist reviewer can browse stored runs and watch drift detection, controller decisions, candidate promotions, registry integrity and rollbacks. It is a single self-contained page served by a read-only, loopback-only standard-library HTTP server (GET only, no external scripts or network calls), and it can also be exported to a static offline snapshot. Figure~\ref{fig:wireframe} shows the original wireframe that guided this implementation.
 
 \begin{figure}[h]
 \centering
@@ -722,7 +722,9 @@ This chapter describes the experimental environment and metrics, reports the res
 
 	\subsection{Implementation/Simulation Environment}
 
-\textbf{Software and justification.} The system is written in Python because it has the dominant ecosystem for machine learning and streaming glue code. Scikit-learn provides the Random Forest \cite{breiman2001rf}, chosen as a fast, interpretable baseline; XGBoost \cite{chen2016xgboost} provides a stronger, industry-realistic tabular model so that portability across algorithms can be examined. River \cite{montiel2021river} provides ADWIN; Page--Hinkley, PSI and MMD are implemented in the project so that their internal statistics can be observed and tested. Apache Kafka is supported as the streaming backbone because it gives a realistic decoupled producer/consumer arrangement, and an in-memory transport with the same wire format is used as a fallback so that experiments never depend on a running broker. Heavier infrastructure (Spark, Kubernetes) was deliberately avoided as unnecessary for a three-to-four-person academic project. Tests are run with PyTest. \todo{add hardware used (CPU, RAM, GPU if any), Python and library versions, and run time of the final experiment}
+\textbf{Software and justification.} The system is written in Python because it has the dominant ecosystem for machine learning and streaming glue code. Scikit-learn provides the Random Forest \cite{breiman2001rf}, chosen as a fast, interpretable baseline; XGBoost \cite{chen2016xgboost} provides a stronger, industry-realistic tabular model so that portability across algorithms can be examined. River \cite{montiel2021river} provides ADWIN; Page--Hinkley, PSI and MMD are implemented in the project so that their internal statistics can be observed and tested. Apache Kafka is supported as the streaming backbone because it gives a realistic decoupled producer/consumer arrangement, and an in-memory transport with the same wire format is used as a fallback so that experiments never depend on a running broker. Heavier infrastructure (Spark, Kubernetes) was deliberately avoided as unnecessary for a three-to-four-person academic project. Tests are run with PyTest (258 tests pass, 1 skipped).
+
+\textbf{Hardware and software versions.} The final experiment was run on a 12-core CPU machine with 15.26~GiB RAM running Ubuntu~22.04, with no GPU, under Python~3.12. The pinned dependencies (scikit-learn, XGBoost and River, declared in \texttt{pyproject.toml}) provide the models and ADWIN. The complete real-data run was CPU-only and took on the order of five hours end to end: Phase~A detection about $6$~minutes, the two Phase~B evolution runs about $18$ and $24$~minutes, and the two Phase~C comparisons (CICIDS2017, $114$~scenarios $\times$ $10$ policies) about $49$ and $58$~minutes for Random Forest and XGBoost respectively, with the cross-algorithm transfer a further $30$~minutes.
 
 \textbf{Data.} The source flows are real CICIDS2017 records \cite{sharafaldin2018cicids}. The CSV files did not provide usable timestamps, so the stream follows capture-file order. Drift is created by controlled re-mixing of class pools and by bounded additive perturbations of informative features; it is therefore \emph{injected} drift over real flows, not naturally observed attack transitions.
 
@@ -957,15 +959,14 @@ The full multi-seed experiment is now complete and gives a clear two-part answer
 \pagebreak
 \section{Conclusions and Future Work}
 
-The objective of this study was to design, implement and evaluate a framework that governs how a flow-based intrusion detector evolves under concept drift, by detecting and characterising drift, choosing among adaptation strategies, testing every candidate model on independent data and deploying it only through a fail-closed safety gate with monitored rollback. The framework was built and verified component by component, and a first quick comparison of ten policies on real CICIDS2017 flows with injected drift confirmed that the whole workflow runs end to end. The findings were partly expected and partly unexpected: it was expected that fixed-update policies would behave differently, but it was notable how far the outcomes diverged, with incremental and replay updates modestly improving on the static model while full retraining and the SSF-inspired policy lowered macro-F1 and forgot much more, and it was unexpected and unsatisfactory that EVO-X itself made no promotions and so matched the static model without demonstrating any gain. The objective of building and verifying the governed-evolution framework is therefore achieved, but the objective of showing that it outperforms fixed policies is not yet achieved, and all four hypotheses remain inconclusive until the planned multi-seed, multi-magnitude experiments, preceded by an examination of why the controller keeps choosing no update, have been completed.
+The objective of this study was to design, implement and evaluate a framework that governs how a flow-based intrusion detector evolves under concept drift, by detecting and characterising drift, choosing among adaptation strategies, testing every candidate model on independent data and deploying it only through a fail-closed safety gate with monitored rollback. The framework was built and verified component by component, and the full comparison of ten policies on real CICIDS2017 flows with injected drift was then completed over six test seeds, three magnitudes and both classifiers ($114$ scenarios per system), with UNSW-NB15 as a cross-dataset check. The findings were partly expected and partly unexpected: it was expected that fixed-update policies would behave differently, but it was notable how far the outcomes diverged, with incremental and replay updates modestly improving on the static model while full retraining and the SSF-inspired policy lowered macro-F1 and forgot much more, and it was unexpected and unsatisfactory that EVO-X made almost no promotions and so matched the static model without demonstrating a gain. The multi-detector fusion front-end, by contrast, succeeded, detecting every injected drift at a very low false-alarm rate and significantly beating each detector alone. The objective of building and verifying the governed-evolution framework is therefore achieved, but the objective of showing that the controller outperforms fixed policies is not: across both classifiers and both datasets the advantage over a best fixed policy is absent, and all four maintenance hypotheses are inconclusive after Holm correction over six seeds. The main open problem is now understood to be the controller's excessive conservatism rather than the correctness of the pipeline, and addressing it is the priority for future work.
 
 \subsection*{Future Work}
 
 \begin{itemize}
-\item Examine the controller's decision records to find why it chose no update, and re-tune its thresholds and weights on validation scenarios if it is too conservative.
-\item Run the full protocol (at least six test seeds, three magnitudes, both Random Forest and XGBoost) and report statistics, harmful and unnecessary updates, and gate sensitivity.
-\item Evaluate generalisation to UNSW-NB15 and, if time permits, CSE-CIC-IDS2018, after verifying the dataset adapters.
-\item Build the replay-driven dashboard and a scripted end-to-end demonstration.
+\item Examine the controller's decision records to find why it almost always chose no update, and recalibrate its proxy gain estimates, thresholds and utility weights on validation scenarios, since the full run shows it is too conservative to realise a benefit.
+\item Extend the evaluation for statistical power (more than six test seeds) so the paired, Holm-corrected hypothesis tests are no longer underpowered, and, if time permits, add CSE-CIC-IDS2018 after verifying its adapter.
+\item Record a scripted end-to-end demonstration using the now-implemented replay-driven dashboard.
 \item Explore learned (meta-learning or reinforcement-learning) strategy selection using the stored evolution history, gradient-projection forgetting mitigation inspired by RepShield, federated or privacy-preserving adaptation across sites, extension to IoT intrusion data, and robustness against adversarial drift designed to manipulate the controller.
 \end{itemize}
 
@@ -973,10 +974,10 @@ The objective of this study was to design, implement and evaluate a framework th
 
 \section{Scholarly Contributions}
 \begin{enumerate}
-	\item \textbf{Research papers.} A research paper in IEEE conference format has been drafted from this work; it has not yet been submitted. \todo{add title, venue and status (communicated / accepted / published) when known}
+	\item \textbf{Research papers.} A research paper titled ``EVO-X: Governed Model Evolution for Continual Network Intrusion Detection under Concept Drift'' has been drafted from this work in IEEE conference format. Status: drafted, not yet communicated to a venue.
 	\item \textbf{Patents or copyright filed.} None.
 	\item \textbf{Project exhibitions.} \todo{list any project exhibition or competition participation, or write ``None''}
-	\item \textbf{Open-source contributions, repository, demo video, deployed product.} Source code, tests and configuration are maintained in the project repository. \todo{GitHub repository link, demo video link}
+	\item \textbf{Open-source contributions, repository, demo video, deployed product.} Source code, tests and configuration are maintained in the project repository at \url{https://github.com/RameshwariS/EVO_X}. \todo{add demo video link once recorded}
 	\item \textbf{Certifications relevant to the project.} \todo{list relevant certifications of team members, or write ``None''}
 \end{enumerate}
 
@@ -997,9 +998,14 @@ L. Wang, X. Zhang, H. Su, and J. Zhu,
 \textit{IEEE Trans. Pattern Analysis and Machine Intelligence}, vol. 46, no. 8, pp. 5362--5383, 2024.
 
 \bibitem{evolving2024survey}
-\todo{authors},
+M. A. Shyaa, N. F. Ibrahim, Z. Zainol, R. Abdullah, M. Anbar, and L. Alzubaidi,
 ``Evolving cybersecurity frontiers: A comprehensive survey on concept drift and feature dynamics aware machine and deep learning in intrusion detection systems,''
 \textit{Engineering Applications of Artificial Intelligence}, vol. 137, p. 109143, 2024.
+
+\bibitem{camarda2025activedrift}
+F. Camarda, A. De Paola, S. Drago, P. Ferraro, and G. Lo Re,
+``Managing concept drift in online intrusion detection systems with active learning,''
+in \textit{Joint National Conf. Cybersecurity (ITASEC \& SERICS)}, CEUR Workshop Proc., vol. 3962, paper 42, 2025.
 
 \bibitem{zhang2024ssf}
 X. Zhang, R. Zhao, Z. Jiang, H. Chen, Y. Ding, E. C. H. Ngai, and S.-H. Yang,
